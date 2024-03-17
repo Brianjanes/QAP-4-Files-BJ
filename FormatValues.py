@@ -76,3 +76,40 @@ def FDateL(DateValue):
     DateValueStr = DateValue.strftime("%A, %B %d, %Y")
 
     return DateValueStr
+
+# Brian'a Additions to this file.
+
+def format_postal_code(postal_code):
+    # Function will accept a value and format it to X#X #X#.
+    postal_code = postal_code.upper()
+    formatted_postal_code = postal_code[0:3] + " " + postal_code[3:6]
+
+    return formatted_postal_code
+
+def check_postal_code(postal_code):
+    error_msg = "Data Entry Error - Invalid postal code. Please try again."
+    # Function will accept a value and check if it is a valid postal code, if it is it will return a formatted postal code, if it is not it will return an error message.
+    if len(postal_code) != 6:
+        return error_msg
+    elif postal_code[0].isalpha() == False or postal_code[2].isalpha() == False or postal_code[4].isalpha() == False:
+        return error_msg
+    elif postal_code[1].isdigit() == False or postal_code[3].isdigit() == False or postal_code[5].isdigit() == False:
+        return error_msg
+    else:
+        return format_postal_code(postal_code)
+
+def format_phone_num(phone_num):
+    # Function will accept a value and format it to (###) ###-####.
+    formatted_phone_num = "(" + phone_num[0:3] + ") " + phone_num[3:6] + "-" + phone_num[6:10]
+
+    return formatted_phone_num
+
+def check_phone_num(phone_num):
+    error_msg = "Data Entry Error - Invalid phone number. Please try again."
+    # Function will accept a value and check if it is a valid phone number, if it is it will return a formatted phone number, if it is not it will return an error message.
+    if len(phone_num) != 10:
+        return error_msg
+    elif phone_num.isdigit() == False:
+        return error_msg
+    else:
+        return format_phone_num(phone_num)
