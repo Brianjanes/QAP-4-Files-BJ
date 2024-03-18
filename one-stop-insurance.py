@@ -30,6 +30,7 @@ f.close()
 print()
 while True:
     # User information inputs
+    print()
     first_name = input("Enter the customer's first name: ").title()
     last_name =  input("Enter the customer's last name: ").title()
 
@@ -50,7 +51,7 @@ while True:
     while True:
         postal_code = input("Enter the customer's postal code (X#X#X#): ")
             # Check if the postal code is valid, return an error message if it's not & return the formatted postal code if it is.
-        check_post_code = FV.check_format_postal_code(postal_code)
+        check_post_code = FV.check_postal_code(postal_code)
         if check_post_code == "Data Entry Error - Invalid postal code. Please try again.":
             print(check_post_code)
             continue
@@ -73,15 +74,16 @@ while True:
     # Insurance policy information inputs.
     print()
     while True:
-        num_cars_insured = int(input("Enter the number of cars to be insured: "))
-        if num_cars_insured.isdigit() == False:
-            print("Data Entry Error - Invalid input type, please use a number.")
-        elif num_cars_insured < 1:
-            print("Data Entry Error - Number of cars insured cannot be less than 1. Please try again.")
-            continue
-        else:
-            break
-    
+        try:
+            num_cars_insured = int(input("Enter the number of cars to be insured: "))
+            if num_cars_insured < 1:
+                print("Data Entry Error - Number of cars insured cannot be less than 1. Please try again.")
+                continue
+            else:
+                break
+        except:
+            print("Data Entry Error - Number of cars insured must be a valid integer. Please try again.")
+
     extra_liability = input("Would you like to add extra liability coverage? (Up to $1, 000, 000) (Y/N): ").upper()
 
     glass_coverage = input("Would you like to add glass coverage? (Y/N): ").upper()
@@ -89,23 +91,25 @@ while True:
     loaner_car = input("Would you like to add loaner car coverage? (Y/N): ").upper()
 
     while True:
+        print()
         payment_method = input("Enter the payment method (Full, Monthly, Down Pay): ").title()
 
         while payment_method not in VALID_PAYMENT_METHODS:
             print("Data Entry Error - Invalid payment method. Please enter a valid payment method.")
             payment_method = input("Enter payment method (Full, Monthly, Down Pay): ").title()
 
-        if payment_method.upper() == 'DOWN PAY':
+        if payment_method.upper() == 'FULL' or payment_method.title() == 'MONTHLY':
+            break
+        elif payment_method.upper() == 'DOWN PAY':
             down_payment = float(input("Enter the amount of the down payment: "))
-            if down_payment.isdigit() == False:
-                print("Data Entry Error - Invalid input type, please enter a number.")
-                continue
-            elif down_payment < 0:
-                print("Data Entry Error - Down payment cannot be less than 0. Please try again.")
-                continue
-            else:
-                break
+        if down_payment < 0:
+            print("Data Entry Error - Down payment cannot be less than 0. Please try again.")
+            continue
+        else:
+            break
     
+# PAYMENT METHOD CURRENTLY CAUSING ERROR - STEPPING AWAY
+
     # Create empty lists to store claim information
     claim_numbers = []
     claim_dates = []
@@ -113,6 +117,7 @@ while True:
 
     # Loop to allow user to enter claim information
     while True:
+        print()
         claim_number = input("Enter the claim number (or type 'DONE' to finish entering claims): ")
         if claim_number.upper() == 'DONE':
             break
@@ -126,6 +131,7 @@ while True:
         claim_amounts.append(claim_amount)
 
     # Processing 
+    
     # Calculate insurance premium for the first automobile
     insurance_premium = BASIC_PREM_COST
 
