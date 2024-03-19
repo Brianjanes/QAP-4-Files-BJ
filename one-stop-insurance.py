@@ -19,7 +19,7 @@ VALID_PAYMENT_METHODS = ['Full', 'Monthly', 'Down Pay']
 # POLICY_NUM = int(f.readline())
 # BASIC_PREM_COST = float(f.readline())
 # XTRA_CAR_DISCOUNT_RATE = float(f.readline())
-# XTRA_LIABILITY_DISCOUNT = float(f.readline())
+# XTRA_LIABILITY_COST = float(f.readline())
 # GLASS_COVERAGE_COST = float(f.readline())
 # LOANER_COST = float(f.readline())
 # HST_RATE = float(f.readline())
@@ -29,7 +29,7 @@ VALID_PAYMENT_METHODS = ['Full', 'Monthly', 'Down Pay']
 POLICY_NUM = 1944
 BASIC_PREM_COST = 869.00
 XTRA_CAR_DISCOUNT_RATE = .25
-XTRA_LIABILITY_DISCOUNT = 130.00
+XTRA_LIABILITY_COST = 130.00
 GLASS_COVERAGE_COST = 86.00
 LOANER_COST = 58.00
 HST_RATE = .15
@@ -70,7 +70,7 @@ while True:
 
     while True:
         print()
-        phone_number = input("Enter the customer's phone number (##########): ")
+        phone_number = "7091234234" # input("Enter the customer's phone number (##########): ")
         # Check if the phone number is valid length, and all digits, return an error message if it's not & return the formatted phone number if it is.
         check_phone_num = FV.check_phone_num(phone_number)
         if check_phone_num == "Data Entry Error - Invalid phone number. Please try again.":
@@ -84,7 +84,7 @@ while True:
     print()
     while True:
         try:
-            num_cars_insured = int(input("Enter the number of cars to be insured: "))
+            num_cars_insured = 2 # int(input("Enter the number of cars to be insured: "))
             if num_cars_insured < 1:
                 print("Data Entry Error - Number of cars insured cannot be less than 1. Please try again.")
                 continue
@@ -93,7 +93,13 @@ while True:
         except:
             print("Data Entry Error - Number of cars insured must be a valid integer. Please try again.")
 
-    extra_liability = input("Would you like to add extra liability coverage? (Up to $1, 000, 000) (Y/N): ").upper()
+    while True:
+        extra_liability = input("Would you like to add extra liability coverage? (Up to $1, 000, 000) (Y/N): ").upper()
+        if extra_liability == "Y" or extra_liability == "N":
+            break
+        else:
+            print("Data Entry Error - Invalid input. Please enter 'Y' or 'N'.")
+            continue
 
     glass_coverage = input("Would you like to add glass coverage? (Y/N): ").upper()
 
