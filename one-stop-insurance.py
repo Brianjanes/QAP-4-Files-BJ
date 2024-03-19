@@ -15,29 +15,38 @@ PROVINCES = ['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', '
 VALID_PAYMENT_METHODS = ['Full', 'Monthly', 'Down Pay']
 
 # Open the defaults file and read the values into variables
-f = open('Default.dat', 'r')
-POLICY_NUM = int(f.readline())
-BASIC_PREM_COST = float(f.readline())
-XTRA_CAR_DISCOUNT_RATE = float(f.readline())
-XTRA_LIABILITY_DISCOUNT = float(f.readline())
-GLASS_COVERAGE_COST = float(f.readline())
-LOANER_COST = float(f.readline())
-HST_RATE = float(f.readline())
-MONTHLY_PRCSSING_FEE = float(f.readline())
-f.close()
+# f = open('Default.dat', 'r')
+# POLICY_NUM = int(f.readline())
+# BASIC_PREM_COST = float(f.readline())
+# XTRA_CAR_DISCOUNT_RATE = float(f.readline())
+# XTRA_LIABILITY_DISCOUNT = float(f.readline())
+# GLASS_COVERAGE_COST = float(f.readline())
+# LOANER_COST = float(f.readline())
+# HST_RATE = float(f.readline())
+# MONTHLY_PRCSSING_FEE = float(f.readline())
+# f.close()
+
+POLICY_NUM = 1944
+BASIC_PREM_COST = 869.00
+XTRA_CAR_DISCOUNT_RATE = .25
+XTRA_LIABILITY_DISCOUNT = 130.00
+GLASS_COVERAGE_COST = 86.00
+LOANER_COST = 58.00
+HST_RATE = .15
+MONTHLY_PRCSSING_FEE = 39.99
 
 # Main Program
 print()
 while True:
     # User information inputs
     print()
-    first_name = input("Enter the customer's first name: ").title()
-    last_name =  input("Enter the customer's last name: ").title()
+    first_name = "brian" # input("Enter the customer's first name: ").title()
+    last_name = "janes" # input("Enter the customer's last name: ").title()
 
     # User address inputs
     print()
-    address = input("Enter the customer's address: ").title()
-    city = input("Enter the customer's city: ").title()
+    address = "123 main st." # input("Enter the customer's address: ").title()
+    city = "st johns" # input("Enter the customer's city: ").title()
 
     while True:
         province = input("Enter the customer's province (2 letter abbreviation): ").upper()
@@ -91,22 +100,20 @@ while True:
     loaner_car = input("Would you like to add loaner car coverage? (Y/N): ").upper()
 
     while True:
+        down_payment = 0
         print()
         payment_method = input("Enter the payment method (Full, Monthly, Down Pay): ").title()
 
         while payment_method not in VALID_PAYMENT_METHODS:
             print("Data Entry Error - Invalid payment method. Please enter a valid payment method.")
-            payment_method = input("Enter payment method (Full, Monthly, Down Pay): ").title()
+            break
 
-        if payment_method.upper() == 'FULL' or payment_method.title() == 'MONTHLY':
-            break
-        elif payment_method.upper() == 'DOWN PAY':
+        if payment_method.upper() == 'DOWN PAY':
             down_payment = float(input("Enter the amount of the down payment: "))
-        if down_payment < 0:
-            print("Data Entry Error - Down payment cannot be less than 0. Please try again.")
-            continue
-        else:
-            break
+            if down_payment <= 0:
+                print("Data Entry Error - Down payment cannot be less than 0. Please try again.")
+                continue
+        break
     
 # PAYMENT METHOD CURRENTLY CAUSING ERROR - STEPPING AWAY
 
@@ -118,17 +125,23 @@ while True:
     # Loop to allow user to enter claim information
     while True:
         print()
-        claim_number = input("Enter the claim number (or type 'DONE' to finish entering claims): ")
+        claim_number = "12345" # input("Enter the claim number (#####) (type 'DONE' to finish): ")
         if claim_number.upper() == 'DONE':
             break
         
-        claim_date = input("Enter the claim date (YYYY-MM-DD): ")
-        claim_amount = float(input("Enter the claim amount: "))
+        claim_date = "2024-01-01" # input("Enter the claim date (YYYY-MM-DD): ")
+        claim_amount = 1288.01 # float(input("Enter the claim amount: "))
 
         # Append claim information to respective lists
         claim_numbers.append(claim_number)
         claim_dates.append(claim_date)
         claim_amounts.append(claim_amount)
+
+        # Ask the user if they want to enter another customer
+        print()
+        repeat = input("Do you want to enter another claim? (Y/N): ")
+        if repeat.upper() != 'Y':
+            break
 
     # Processing 
     
@@ -168,3 +181,10 @@ while True:
     # Calculate invoice date and first payment date
     invoice_date = datetime.datetime.now().strftime('%Y-%m-%d')
     first_payment_date = (datetime.datetime.now() + datetime.timedelta(days=30)).replace(day=1).strftime('%Y-%m-%d')
+
+    print("\nPrevious Claims:")
+    print()
+    print("   Claim #    Claim Date      Amount")
+    print("  -----------------------------------")
+    for i in range(len(claim_numbers)):
+        print(f"   {claim_numbers[i]}      {claim_dates[i]}   {FV.FDollar2(claim_amounts[i])}")
