@@ -79,14 +79,24 @@ def FDateL(DateValue):
 
 # Brian'a Additions to this file.
 
-# Function will accept a value that has already been validated through the check_post_code function and format it to X#X #X#.
+
 def format_postal_code(postal_code):
+    """
+    Accepts a value that has already been validated through the check_post_code function and format it to X#X #X#.
+
+    Retuns a formatted postal code.
+    """
     postal_code = postal_code.upper()
     formatted_postal_code = postal_code[0:3] + " " + postal_code[3:6]
     return formatted_postal_code
 
-# Function will accept a value and check if it is a valid postal code, if it is it will return a formatted postal code, if it is not it will return an error message.
+
 def check_postal_code(postal_code):
+    """
+    Accepts a value and checks if it is a valid postal code in terms of character count, alphabetical characters, and numerical characters. 
+
+    Returns a formatted postal code or an error message.
+    """
     if len(postal_code) != 6:
         return "Data Entry Error (Invalid postal code) - Character count issue. Please try again."
     elif postal_code[0].isalpha() == False or postal_code[2].isalpha() == False or postal_code[4].isalpha() == False:
@@ -96,13 +106,21 @@ def check_postal_code(postal_code):
     else:
         return format_postal_code(postal_code)
 
-# Function will accept a value that has already been validated through the check_phone_num function and format it to (###) ###-####.
 def format_phone_num(phone_num):
+    """
+    Accepts a value that has already been validated through the check_phone_num function and format it to (###) ###-####.
+
+    Returns a formatted phone number.
+    """
     formatted_phone_num = "(" + phone_num[0:3] + ") " + phone_num[3:6] + "-" + phone_num[6:10]
     return formatted_phone_num
 
-    # Function will accept a value and check if it is a valid phone number, if it is it will return a formatted phone number, if it is not it will return an error message.
 def check_phone_num(phone_num):
+    """
+    Accepts a value and checks if it is a valid phone number in terms of character count and numerical characters.
+
+    Returns a formatted phone number or an error message.
+    """
     if len(phone_num) != 10:
         return "Data Entry Error (Invalid phone number) - Character count issue. Please try again."
     elif phone_num.isdigit() == False:
