@@ -152,23 +152,24 @@ while True:
     while True:
         down_payment = 0
         print()
-        payment_method = input("Enter the payment method (Full, Monthly, Down Pay): ").title()
+        payment_method = input("Enter the payment method (Full, Monthly, or Down Pay): ").title()
 
-        # Check if the payment method is valid cross referencing out already created list of valid payment methods, return an error message if it's not.
+        # Check if the payment method is valid by cross-referencing with the list of valid payment methods.
         while payment_method.upper() not in VALID_PAYMENT_METHODS:
             print("Data Entry Error - Invalid payment method. Please enter a valid payment method.")
-            break
-        
+            payment_method = input("Enter the payment method (Full, Monthly, or Down Pay): ").title()
+
         # If the payment method is 'Down Pay', ask the user to enter the down payment amount.
         if payment_method.upper() == 'DOWN PAY':
             while True:
                 try:
-                    # Ask the user to enter the down payment amount. Cannot be less than or equal to 0.
+                    # Ask the user to enter the down payment amount.
                     down_payment = float(input("Enter the amount of the down payment: "))
+                    # Check if the down payment is valid.
                     if down_payment <= 0:
                         print("Data Entry Error - Down payment cannot be less than or equal to 0. Please try again.")
                         continue
-                    break
+                    break  # Break out of the loop if down payment is valid
                 except ValueError:
                     print("Data Entry Error - Invalid input. Please enter a valid numerical value.")
         break
@@ -196,7 +197,6 @@ while True:
 
         # Deciding not to validate this input.
         claim_date = input("Enter the claim date (YYYY-MM-DD): ")
-
 
         while True:
             try:
