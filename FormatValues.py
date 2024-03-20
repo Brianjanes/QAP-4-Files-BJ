@@ -84,12 +84,11 @@ def format_postal_code(postal_code):
     """
     Accepts a value that has already been validated through the check_post_code function and format it to X#X #X#.
 
-    Retuns a formatted postal code.
+    Returns a formatted postal code.
     """
     postal_code = postal_code.upper()
-    formatted_postal_code = postal_code[0:3] + " " + postal_code[3:6]
+    formatted_postal_code = postal_code[0] + postal_code[1] + postal_code[2] + " " + postal_code[3] + postal_code[4] + postal_code[5]
     return formatted_postal_code
-
 
 def check_postal_code(postal_code):
     """
@@ -99,12 +98,13 @@ def check_postal_code(postal_code):
     """
     if len(postal_code) != 6:
         return "Data Entry Error (Invalid postal code) - Character count issue. Please try again."
-    elif postal_code[0].isalpha() == False or postal_code[2].isalpha() == False or postal_code[4].isalpha() == False:
+    elif not (postal_code[0].isalpha() and postal_code[2].isalpha() and postal_code[4].isalpha()):
         return "Data Entry Error (Invalid postal code) - Alphabetical character issue. Please try again."
-    elif postal_code[1].isdigit() == False or postal_code[3].isdigit() == False or postal_code[5].isdigit() == False:
+    elif not (postal_code[1].isdigit() and postal_code[3].isdigit() and postal_code[5].isdigit()):
         return "Data Entry Error (Invalid postal code) - Numerical character issue. Please try again."
     else:
         return format_postal_code(postal_code)
+
 
 def format_phone_num(phone_num):
     """
