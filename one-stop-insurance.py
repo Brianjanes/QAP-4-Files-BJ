@@ -15,18 +15,6 @@ PROVINCES = ['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', '
 # Defining valid payment methods.
 VALID_PAYMENT_METHODS = ['FULL', 'MONTHLY', 'DOWN PAY']
 
-# Open the defaults file and read the values into variables
-# f = open('Default.dat', 'r')
-# POLICY_NUM = int(f.readline())
-# BASIC_PREM_COST = float(f.readline())
-# XTRA_CAR_DISCOUNT_RATE = float(f.readline())
-# XTRA_LIABILITY_COST = float(f.readline())
-# GLASS_COVERAGE_COST = float(f.readline())
-# LOANER_COST = float(f.readline())
-# HST_RATE = float(f.readline())
-# MONTHLY_PRCSSING_FEE = float(f.readline())
-# f.close()
-
 POLICY_NUM = 1944
 BASIC_PREM_COST = 869.00
 XTRA_CAR_DISCOUNT_RATE = .25
@@ -198,8 +186,13 @@ while True:
             else:
                 pass
 
-        # Deciding not to validate this input.
-        claim_date = input("Enter the claim date (YYYY-MM-DD): ")
+        while True:
+            claim_date = input("Enter the claim date (YYYY-MM-DD): ")
+            try:
+                datetime.datetime.strptime(claim_date, '%Y-%m-%d')
+                break
+            except ValueError:
+                print("Data Entry Error - Invalid date format. Please enter a date in the format YYYY-MM-DD.")
 
         while True:
             try:
@@ -300,7 +293,7 @@ while True:
     print(f"    City:                     {city:<18s}")
     print(f"    Province:                 {province:<2s}")
     print(f"    Postal Code:              {postal_code:<7s}")
-    print(f"    Phone Number:              {phone_number:<14s}")
+    print(f"    Phone Number:             {phone_number:<14s}")
 
     # Display Insurance Policy Information
     print()
@@ -310,9 +303,10 @@ while True:
     print(f"    Loaner Car Coverage:         {loaner_car_display:<3s}")
     print()
     print(f"    Payment Method:             {payment_method:<8s}")
+
     # Display Down Payment if payment method is 'Down Pay'.
     if payment_method.upper() == 'DOWN PAY':
-        print(f"    Down Payment:               {formatted_down_payment:>10s}")
+        print(f"    Down Payment:              {formatted_down_payment:>10s}")
 
     # Display Calculated Values
     print()
@@ -349,8 +343,6 @@ while True:
         time.sleep(.3)  # To create the blinking effect
         sys.stdout.write('\033[2K\r')  # Clears the entire line and carriage returns
         time.sleep(.3)
-        # Increment the policy number by 1.
-        POLICY_NUM += 1
     print()
     print("Policy data successfully saved.", end='\r')
     print()
@@ -358,8 +350,10 @@ while True:
     # Housekeeping
     # Ask the user if they want to enter another customer
     print()
-    repeat = input("Do you want to enter another customer? (Y/N): ")
+    repeat = input("Do you want to enter another customer? (Y/N): ").upper()
     if repeat.upper() != 'Y':
         break
     else:
+        # Increment the policy number by 1.
+        POLICY_NUM += 1
         continue
