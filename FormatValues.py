@@ -81,7 +81,7 @@ def FDateL(DateValue):
 
 # Brian'a Additions to this file.
 
-
+# Formatting & validating postal codes
 def format_postal_code(postal_code):
     """
     Accepts a value that has already been validated through the check_post_code function and format it to X#X #X#.
@@ -107,7 +107,7 @@ def check_postal_code(postal_code):
     else:
         return format_postal_code(postal_code)
 
-
+# Formatting & validating phone numbers
 def format_phone_num(phone_num):
     """
     Accepts a value that has already been validated through the check_phone_num function and format it to (###) ###-####.
