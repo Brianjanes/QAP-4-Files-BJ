@@ -127,7 +127,7 @@ while True:
 
     # Loaner car coverage input
     while True:
-        loaner_car = "N" # input("Would you like to add loaner car coverage? (Y/N):      ").upper()
+        loaner_car = "Y" # input("Would you like to add loaner car coverage? (Y/N):      ").upper()
         if loaner_car == "Y" or loaner_car == "N":
             # Display 'Yes' if the user enters 'Y', and 'No' if the user enters 'N'.
             loaner_car_display = "Yes" if loaner_car == "Y" else "No"
@@ -225,7 +225,6 @@ while True:
             break
 
     # Processing 
-    
     # Calculate insurance premium for the first automobile.
     insurance_premium = BASIC_PREM_COST
 
@@ -259,6 +258,9 @@ while True:
     elif payment_method.upper() == 'DOWN PAY':
         monthly_payment = (total_cost - down_payment + MONTHLY_PRCSSING_FEE) / 8
 
+    # Calculate total insurance premium (pre-tax)
+    total_insurance_premium_pretax = insurance_premium + extra_costs
+
     # Calculate invoice date and first payment date.
     invoice_date = datetime.datetime.now().strftime('%Y-%m-%d')
     first_payment_date = (datetime.datetime.now() + datetime.timedelta(days=30)).replace(day=1).strftime('%Y-%m-%d')
@@ -270,30 +272,31 @@ while True:
     formatted_total_cost = FV.FDollar2(total_cost)
     formatted_monthly_payment = FV.FDollar2(monthly_payment)
     formatted_extra_costs = FV.FDollar2(extra_costs)
+    formatted_pre_tax = FV.FDollar2(total_insurance_premium_pretax)
     # Formatting customer's full name.
     full_name = first_name + " " + last_name
 
     # Display receipt.
     print()
-    print("=============================================")
+    print("============================================")
     print()
-    print("              One Stop Insurance              ")
-    print("          Policy Information Receipt          ")
+    print("             One Stop Insurance")
+    print("         Policy Information Receipt")
     print()
-    print("=============================================")
+    print("============================================")
     print()
-    print(f"     Policy Number:             {POLICY_NUM:>6d}")
-    print(f"     Invoice Date:             {invoice_date:<10s}")
+    print(f"     Policy Number:           {POLICY_NUM:>6d}")
+    print(f"     Invoice Date:           {invoice_date:<10s}")
     print()
-    print("=============================================")
+    print("============================================")
     # Display Customer Information
     print()
-    print(f"    Name:                    {full_name:<22s}")
-    print(f"    Address:                 {address:<20s}")
-    print(f"    City:                    {city:<18s}")
-    print(f"    Province:                {province:<2s}")
-    print(f"    Postal Code:             {postal_code:<7s}")
-    print(f"    Phone Number:            {phone_number:<14s}")
+    print(f"    Name:                  {full_name:<22s}")
+    print(f"    Address:               {address:<20s}")
+    print(f"    City:                  {city:<18s}")
+    print(f"    Province:              {province:<2s}")
+    print(f"    Postal Code:           {postal_code:<7s}")
+    print(f"    Phone Number:          {phone_number:<14s}")
 
     # Display Insurance Policy Information
     print()
@@ -302,37 +305,36 @@ while True:
     print(f"    Glass Coverage:               {glass_coverage_display:<3s}")
     print(f"    Loaner Car Coverage:          {loaner_car_display:<3s}")
     print()
-    print(f"    Payment Method:              {payment_method:<8s}")
+    # Formatting this string to the right for better consistent alignment.
+    print(f"    Payment Method:             {payment_method:>8s}") 
 
     # Display Down Payment if payment method is 'Down Pay'.
     if payment_method.upper() == 'DOWN PAY':
-        print(f"    Down Payment:              {formatted_down_payment:>10s}")
+        print(f"    Down Payment:             {formatted_down_payment:>10s}")
 
     # Display Calculated Values
     print()
-    print(f"    Insurance Premium:         {formatted_insurance_premium:>10s}")
-    print(f"    Extra Costs Total:         {formatted_extra_costs:>10s}")
-    print(f"    HST:                       {formatted_hst_cost:>10s}")
-    print(f"    Total Cost:                {formatted_total_cost:>10s}")
-    print(f"    Monthly Payment:           {formatted_monthly_payment:>10s}")
+    print(f"    Insurance Premium:        {formatted_insurance_premium:>10s}")
+    print(f"    Extra Costs Total:        {formatted_extra_costs:>10s}")
+    print(f"    HST:                      {formatted_hst_cost:>10s}")
+    print(f"    Total Cost:               {formatted_total_cost:>10s}")
+    print(f"    Monthly Payment:          {formatted_monthly_payment:>10s}")
     print()
-    print(f"    First Payment Date:        {first_payment_date:>10s}")
+    print(f"    First Payment Date:       {first_payment_date:>10s}")
     print()
 
     # Display claims information
-    print("=============================================")
+    print("============================================")
     print()
-    print(f"      Previous Claims:")
-    print()
-    print(f"      Claim #    Claim Date      Amount")
-    print(f"     -----------------------------------")
+    if len(claims) == 0:
+        print(f"              No previous claims.")
+        print()
+    else:
+            print(f"      Claim #    Claim Date      Amount")
+            print(f"      ---------------------------------")
     for claim in claims:
-        print(f"      {claim['claim_number']}      {claim['claim_date']}  {claim['claim_amount']:>10s}")
-    print(f"     -----------------------------------")
-
-    # Calculate total insurance premium (pre-tax)
-    total_insurance_premium_pretax = insurance_premium + extra_costs
-    formatted_pre_tax = FV.FDollar2(total_insurance_premium_pretax)
+            print(f"      {claim['claim_number']}      {claim['claim_date']}  {claim['claim_amount']:>10s}")
+    print(f"      ---------------------------------")
 
     # Display total insurance premium (pre-tax) and save policy data message
     print()
@@ -346,6 +348,10 @@ while True:
         time.sleep(.3)
     print()
     print("Policy data successfully saved.", end='\r')
+    print()
+
+    # Increment the policy number by 1.
+    POLICY_NUM += 1
 
     # Housekeeping
     # Ask the user if they want to enter another customer
@@ -354,6 +360,4 @@ while True:
     if repeat.upper() != 'Y':
         break
     else:
-        # Increment the policy number by 1.
-        POLICY_NUM += 1
         continue
