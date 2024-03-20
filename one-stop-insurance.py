@@ -158,6 +158,9 @@ while True:
                     if down_payment <= 0:
                         print("Data Entry Error - Down payment cannot be less than or equal to 0. Please try again.")
                         continue
+                    if down_payment > total_cost:
+                        print("Data Entry Error - Down payment cannot be greater than the total cost. Please try again.")
+                        continue
                     break  # Break out of the loop if down payment is valid
                 except ValueError:
                     print("Data Entry Error - Invalid input. Please enter a valid numerical value.")
