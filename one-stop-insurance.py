@@ -282,27 +282,27 @@ while True:
     print()
     print("=============================================")
     print()
-    print(f"     Policy Number:            {POLICY_NUM:>6d}")
+    print(f"     Policy Number:             {POLICY_NUM:>6d}")
     print(f"     Invoice Date:             {invoice_date:<10s}")
     print()
     print("=============================================")
     # Display Customer Information
     print()
-    print(f"    Name:                     {full_name:<22s}")
-    print(f"    Address:                  {address:<20s}")
-    print(f"    City:                     {city:<18s}")
-    print(f"    Province:                 {province:<2s}")
-    print(f"    Postal Code:              {postal_code:<7s}")
-    print(f"    Phone Number:             {phone_number:<14s}")
+    print(f"    Name:                    {full_name:<22s}")
+    print(f"    Address:                 {address:<20s}")
+    print(f"    City:                    {city:<18s}")
+    print(f"    Province:                {province:<2s}")
+    print(f"    Postal Code:             {postal_code:<7s}")
+    print(f"    Phone Number:            {phone_number:<14s}")
 
     # Display Insurance Policy Information
     print()
-    print(f"    Number of Cars Insured:     {num_cars_insured:>2d}")
-    print(f"    Extra Liability Coverage:    {extra_liability_display:<3s}")
-    print(f"    Glass Coverage:              {glass_coverage_display:<3s}")
-    print(f"    Loaner Car Coverage:         {loaner_car_display:<3s}")
+    print(f"    Number of Cars Insured:      {num_cars_insured:>2d}")
+    print(f"    Extra Liability Coverage:     {extra_liability_display:<3s}")
+    print(f"    Glass Coverage:               {glass_coverage_display:<3s}")
+    print(f"    Loaner Car Coverage:          {loaner_car_display:<3s}")
     print()
-    print(f"    Payment Method:             {payment_method:<8s}")
+    print(f"    Payment Method:              {payment_method:<8s}")
 
     # Display Down Payment if payment method is 'Down Pay'.
     if payment_method.upper() == 'DOWN PAY':
@@ -315,6 +315,7 @@ while True:
     print(f"    HST:                       {formatted_hst_cost:>10s}")
     print(f"    Total Cost:                {formatted_total_cost:>10s}")
     print(f"    Monthly Payment:           {formatted_monthly_payment:>10s}")
+    print()
     print(f"    First Payment Date:        {first_payment_date:>10s}")
     print()
 
@@ -345,7 +346,6 @@ while True:
         time.sleep(.3)
     print()
     print("Policy data successfully saved.", end='\r')
-    print()
 
     # Housekeeping
     # Ask the user if they want to enter another customer
