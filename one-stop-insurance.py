@@ -79,7 +79,7 @@ while True:
     # Pausing the program for 3 seconds to allow the user to read the information.
     print()
     print()
-    for _ in range(3):  # Change to control number of 'blinks'
+    for _ in range(2):  # Change to control number of 'blinks'
         print(f'{GREEN}    Processing Policy Information...{RESET}', end='\r')
         time.sleep(.3)  # To create the blinking effect
         sys.stdout.write('\033[2K\r')  # Clears the entire line and carriage returns
@@ -321,7 +321,6 @@ while True:
     while True:
         # Initialize down payment to 0.
         down_payment = 0
-        print()
         payment_method = input("Enter the payment method (Full, Monthly, or Down Pay): ").title()
 
         # Check if the payment method is valid by cross-referencing with the list of valid payment methods.
@@ -571,7 +570,7 @@ while True:
     # Ask the user if they want to enter another customer
     print()
     while True:
-        repeat = input("Do you want to enter another customer? (Y/N): ").upper()
+        repeat = input({RED} + "Do you want to enter another customer? (Y/N): " + {RESET}).upper()
         print()
         if repeat == 'Y':
             if os.name == 'nt':  # If the system is Windows
