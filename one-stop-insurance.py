@@ -15,6 +15,7 @@ import os
 # Define ANSI escape codes for colors
 RED = '\033[91m'
 RESET = '\033[0m'
+GREEN = "\033[32m"
 
 # Define program constants
 # Defining valid provinces.
@@ -32,7 +33,7 @@ HST_RATE = .15
 MONTHLY_PRCSSING_FEE = 39.99
 
 # Define the allowed characters for the address, and city inputs.
-ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz .'-1234567890"
+ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz .,'-1234567890"
 
 # Main Program
 print()
@@ -40,14 +41,30 @@ while True:
     # User information inputs.
     print()
     # User name inputs.
-    first_name = input("Enter the customer's first name: ").title()
-    last_name =  input("Enter the customer's last name:  ").title()
+    # First name - just a simple check to make sure the user only enters alphabetic characters.
+    while True:
+        first_name = input("Enter the customer's first name: ").strip()
+        if not first_name.isalpha():
+            print(RED + "Data Entry Error - First name must contain only alphabetic characters. Please try again." + RESET)
+            continue
+        else:
+            break
+
+    # Last name - just a simple check to make sure the user only enters alphabetic characters.
+    while True:
+        last_name = input("Enter the customer's last name: ").strip()
+        if not last_name.isalpha():
+            print(RED + "Data Entry Error - Last name must contain only alphabetic characters. Please try again." + RESET)
+            continue
+        else:
+            break
 
     # User address input.
     print()
     while True:
         address = input("Enter the customer's address: ").title()
         if not all(char in ALLOWED_CHARACTERS for char in address):
+            print()
             print(RED + "Data Entry Error - Invalid address. Please try again." + RESET)
             continue
         else:
@@ -57,6 +74,7 @@ while True:
     while True:
         city = string.capwords(input("Enter the customer's city: "))
         if not all(char in ALLOWED_CHARACTERS for char in city):
+            print()
             print(RED + "Data Entry Error - Invalid character used. Please try again." + RESET)
             continue
         else:
@@ -69,6 +87,7 @@ while True:
         # Check if the returned value is longer than 2 characters - this means it's an error message.
         if len(validated_province) > 2:  
             # Print error message in red text.
+            print()
             print(RED + validated_province + RESET) 
             continue
         else:
@@ -79,7 +98,8 @@ while True:
         postal_code = input("Enter the customer's postal code (X#X#X#): ")
         check_post_code = FV.check_postal_code(postal_code)
         if check_post_code == "Data Entry Error (Invalid postal code) - Character count issue. Please try again." or check_post_code == "Data Entry Error (Invalid postal code) - Alphabetical character issue. Please try again." or check_post_code == "Data Entry Error (Invalid postal code) - Numerical character issue. Please try again.":
-            print(check_post_code)
+            print()
+            print(RED + check_post_code + RESET)
             continue
         else:
             postal_code = check_post_code
@@ -92,7 +112,8 @@ while True:
         # Check if the phone number is valid length, and all digits, return an error message if it's not & return the formatted phone number if it is.
         check_phone_num = FV.check_phone_num(phone_number)
         if check_phone_num == "Data Entry Error (Invalid phone number) - Character count issue. Please try again." or check_phone_num == "Data Entry Error (Invalid phone number) - Phone number must only be numerical values. Please try again.":
-            print(check_phone_num)
+            print()
+            print(RED + check_phone_num + RESET)
             continue
         else:
             phone_number = check_phone_num
@@ -106,12 +127,14 @@ while True:
             print()
             # Check if the number of cars insured is less than 1, return an error message if it is.
             if num_cars_insured < 1:
-                print("Data Entry Error - Number of cars insured cannot be less than 1. Please try again.")
+                print()
+                print(RED + "Data Entry Error - Number of cars insured cannot be less than 1. Please try again." + RESET)
                 continue
             else:
                 break
         except ValueError:
-            print("Data Entry Error - Number of cars insured must be a valid integer. Please try again.")
+            print()
+            print(RED + "Data Entry Error - Number of cars insured must be a valid integer. Please try again." + RESET)
 
     # Extra liability input
     while True:
@@ -121,7 +144,8 @@ while True:
             extra_liability_display = "Yes" if extra_liability == "Y" else "No"
             break
         else:
-            print("Data Entry Error - Invalid input. Please enter 'Y' or 'N'.")
+            print()
+            print(RED + "Data Entry Error - Invalid input. Please enter 'Y' or 'N'." + RESET)
             continue
 
     # Glass coverage input
@@ -132,7 +156,8 @@ while True:
             glass_coverage_display = "Yes" if glass_coverage == "Y" else "No"
             break
         else:
-            print("Data Entry Error - Invalid input. Please enter 'Y' or 'N'.")
+            print()
+            print(RED + "Data Entry Error - Invalid input. Please enter 'Y' or 'N'." + RESET)
             continue
 
     # Loaner car coverage input
@@ -143,7 +168,8 @@ while True:
             loaner_car_display = "Yes" if loaner_car == "Y" else "No"
             break
         else:
-            print("Data Entry Error - Invalid input. Please enter 'Y' or 'N'.")
+            print()
+            print(RED + "Data Entry Error - Invalid input. Please enter 'Y' or 'N'." + RESET)
             continue
 
     # Processing for policy information.
@@ -173,6 +199,7 @@ while True:
     total_cost = total_insurance_premium + hst_cost
     
     # Payment method input
+    # I chose to do this after processing so that I could vailidate the down payment amount against the total cost. The downpayment can't be greater than total cost!
     while True:
         # Initialize down payment to 0.
         down_payment = 0
@@ -181,7 +208,8 @@ while True:
 
         # Check if the payment method is valid by cross-referencing with the list of valid payment methods.
         while payment_method.upper() not in VALID_PAYMENT_METHODS:
-            print("Data Entry Error - Invalid payment method. Please enter a valid payment method.")
+            print()
+            print(RED + "Data Entry Error - Invalid payment method. Please enter a valid payment method." + RESET)
             payment_method = input("Enter the payment method (Full, Monthly, or Down Pay): ").title()
 
         # If the payment method is 'Down Pay', ask the user to enter the down payment amount.
@@ -192,15 +220,18 @@ while True:
                     down_payment = float(input("Enter the amount of the down payment: "))
                     # Check if the down payment is valid.
                     if down_payment <= 0:
-                        print("Data Entry Error - Down payment cannot be less than or equal to 0. Please try again.")
+                        print()
+                        print(RED + "Data Entry Error - Down payment cannot be less than or equal to 0. Please try again." + RESET)
                         continue
                     # Here is where I am having issues. I need to check if the down payment is greater than the total cost, and return an error message if it is.
                     if down_payment > total_cost:
-                        print("Data Entry Error - Down payment cannot be greater than the total cost. Please try again.")
+                        print()
+                        print(RED + "Data Entry Error - Down payment cannot be greater than the total cost. Please try again." + RESET)
                         continue
                     break  # Break out of the loop if down payment is valid
                 except ValueError:
-                    print("Data Entry Error - Invalid input. Please enter a valid numerical value.")
+                    print()
+                    print(RED + "Data Entry Error - Invalid input. Please enter a valid numerical value." + RESET)
             break  
         elif payment_method.upper() == 'FULL' or payment_method.upper() == 'MONTHLY':
             break
@@ -217,14 +248,14 @@ while True:
         else:
             # Check if the claim number is 5 characters long, return an error message if it's not.
             if len(claim_number) != 5:
-                print("Data Entry Error - Invalid claim number. Please enter a 5-digit number.")
+                print()
+                print(RED + "Data Entry Error - Invalid claim number. Please enter a 5-digit number." + RESET)
                 continue
             # Check if the claim number is a valid number, return an error message if it's not.
             elif not claim_number.isdigit():
-                print("Data Entry Error - Invalid claim number. Please enter a numerical value.")
+                print()
+                print(RED + "Data Entry Error - Invalid claim number. Please enter a numerical value." + RESET)
                 continue
-            else:
-                pass
 
         while True:
             claim_date = input("Enter the claim date (YYYY-MM-DD): ")
@@ -232,19 +263,21 @@ while True:
             if validated_date != "Data Entry Error (Invalid date) - Date must be in the format YYYY-MM-DD.":
                 break
             else:
-                print(validated_date)
-                break
+                print()
+                print(RED + validated_date + RESET)
 
         while True:
             try:
                 claim_amount = float(input("Enter the claim amount: "))
                 # Check if the claim amount is greater than 0, return an error message if it's not.
                 if claim_amount <= 0:
-                    print("Data Entry Error - Claim amount must be greater than 0. Please try again.")
+                    print()
+                    print(RED + "Data Entry Error - Claim amount must be greater than 0. Please try again." + RESET)
                     continue
                 break
             except ValueError:
-                print("Data Entry Error - Invalid input. Please enter a valid numerical value.")
+                print()
+                print(RED + "Data Entry Error - Invalid input. Please enter a valid numerical value." + RESET)
 
         # Format the claim amount to a dollar value.
         formatted_claim_amount = FV.FDollar2(claim_amount)
@@ -262,12 +295,17 @@ while True:
         # Ask the user if they want to enter another customer.
         print()
         repeat = input("Do you want to enter another claim? (Y/N): ")
-        if repeat.upper() != 'Y':
+        if repeat.upper() == 'Y':
+            continue
+        elif repeat.upper() == 'N':
             if os.name == 'nt':  # If the system is Windows
                 os.system('cls')
             else:
                 os.system('clear')
             break
+        else:
+            print()
+            print(RED + "Data Entry Error - Invalid input. Please enter 'Y' or 'N'." + RESET)
 
     # Procesing for payment type, invoice date, and premium cost (pre-tax)
     # Calculate monthly payment.
@@ -368,7 +406,7 @@ while True:
         sys.stdout.write('\033[2K\r')  # Clears the entire line and carriage returns
         time.sleep(.3)
     print()
-    print("Policy data successfully saved.", end='\r')
+    print(GREEN + "Policy data successfully saved.", end='\r' + RESET)
     print()
 
     # Increment the policy number by 1.
@@ -377,13 +415,21 @@ while True:
     # Housekeeping
     # Ask the user if they want to enter another customer
     print()
-    repeat = input("Do you want to enter another customer? (Y/N): ").upper()
-    if repeat.upper() != 'Y':
-        break
-    else:
-        if repeat.upper() != 'Y':
+    while True:
+        repeat = input("Do you want to enter another customer? (Y/N): ").upper()
+        if repeat == 'Y':
             if os.name == 'nt':  # If the system is Windows
                 os.system('cls')
             else:
                 os.system('clear')
-            break
+            break  
+        elif repeat == 'N':
+            if os.name == 'nt':  # If the system is Windows
+                os.system('cls')
+            else:
+                os.system('clear')
+            break  
+        else:
+            print(RED + "Data Entry Error - Invalid input. Please enter 'Y' or 'N'." + RESET)
+
+

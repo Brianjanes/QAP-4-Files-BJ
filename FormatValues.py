@@ -93,20 +93,29 @@ def format_postal_code(postal_code):
     formatted_postal_code = postal_code[0] + postal_code[1] + postal_code[2] + " " + postal_code[3] + postal_code[4] + postal_code[5]
     return formatted_postal_code
 
+# Formatting & validating postal codes
 def check_postal_code(postal_code):
     """
-    Accepts a value and checks if it is a valid postal code in terms of character count, alphabetical characters, and numerical characters. 
+    Accepts a value and checks if it is a valid postal code in terms of character count, alphabetical characters,
+    and numerical characters. Formats the postal code to the format "A1A 1A1".
 
     Returns a formatted postal code or an error message.
     """
-    if len(postal_code) != 6:
-        return "Data Entry Error (Invalid postal code) - Character count issue. Please try again."
-    elif not (postal_code[0].isalpha() and postal_code[2].isalpha() and postal_code[4].isalpha()):
-        return "Data Entry Error (Invalid postal code) - Alphabetical character issue. Please try again."
-    elif not (postal_code[1].isdigit() and postal_code[3].isdigit() and postal_code[5].isdigit()):
-        return "Data Entry Error (Invalid postal code) - Numerical character issue. Please try again."
+    # Remove any non-alphanumeric characters from the postal code with filter and isalnum - very cool
+    normalized_postal_code = ''.join(filter(str.isalnum, postal_code))
+    
+    # Check if the normalized postal code has the correct length and format
+    if len(normalized_postal_code) != 6:
+        return "Data Entry Error (Invalid postal code) - Postal code must be 6 characters long. Please try again."
+    elif not (normalized_postal_code[0].isalpha() and normalized_postal_code[2].isalpha() and normalized_postal_code[4].isalpha()):
+        return "Data Entry Error (Invalid postal code) - Postal code must have letters in the first, third, and fifth positions. Please try again."
+    elif not (normalized_postal_code[1].isdigit() and normalized_postal_code[3].isdigit() and normalized_postal_code[5].isdigit()):
+        return "Data Entry Error (Invalid postal code) - Postal code must have digits in the second, fourth, and sixth positions. Please try again."
     else:
-        return format_postal_code(postal_code)
+        # Insert space between the third and fourth characters to format the postal code
+        formatted_postal_code = f"{normalized_postal_code[:3]} {normalized_postal_code[3:]}"
+        return formatted_postal_code
+
 
 # Formatting & validating phone numbers
 def format_phone_num(phone_num):
@@ -118,6 +127,7 @@ def format_phone_num(phone_num):
     formatted_phone_num = "(" + phone_num[0:3] + ") " + phone_num[3:6] + "-" + phone_num[6:10]
     return formatted_phone_num
 
+# Formatting & validating phone numbers
 def check_phone_num(phone_num):
     """
     Accepts a value and checks if it is a valid phone number in terms of character count and numerical characters.
@@ -141,6 +151,7 @@ def format_date(date):
     formatted_date = date[0:4] + "-" + date[4:6] + "-" + date[6:8]
     return formatted_date
 
+# Validating dates in YYYY-MM-DD format.
 def check_date(date):
     """
     Accepts a value and checks if it is a valid date in terms of character count,
