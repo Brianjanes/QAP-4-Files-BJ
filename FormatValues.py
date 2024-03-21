@@ -1,3 +1,4 @@
+# Importing required modules.
 import datetime
 
 def FDollar2(DollarValue):
@@ -129,3 +130,45 @@ def check_phone_num(phone_num):
         return "Data Entry Error (Invalid phone number) - Phone number must only be numerical values. Please try again."
     else:
         return format_phone_num(phone_num)
+    
+# Formatting & validatng dates to YYYY-MM-DD format.
+def format_date(date):
+    """
+    Accepts a value that has already been validated through the check_date function and format it to YYYY-MM-DD.
+
+    Returns a formatted date.
+    """
+    formatted_date = date[0:4] + "-" + date[4:6] + "-" + date[6:8]
+    return formatted_date
+
+def check_date(date):
+    """
+    Accepts a value and checks if it is a valid date in terms of character count,
+    numerical characters, and valid date values.
+
+    Returns a formatted date or an error message.
+    """
+    if len(date) != 10:
+        return "Data Entry Error (Invalid date) - Date must be in the format YYYY-MM-DD."
+    elif not date[0:4].isdigit() or not date[5:7].isdigit() or not date[8:10].isdigit():
+        return "Data Entry Error (Invalid date) - Date must only contain numerical values."
+    else:
+        try:
+            year, month, day = map(int, date.split('-'))
+            datetime.datetime(year, month, day)
+            return date
+        except ValueError:
+            return "Data Entry Error (Invalid date) - Date values are out of range."
+
+# Validating province
+def validate_province(province):
+    """
+    Accepts a value and checks if it is a valid province abbreviation.
+
+    Returns a formatted province abbreviation or an error message.
+    """
+    province = province.upper()
+    if province in ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"]:
+        return province
+    else:
+        return "Data Entry Error (Invalid province) - Please enter a valid province abbreviation."

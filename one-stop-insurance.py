@@ -8,6 +8,13 @@ import FormatValues as FV
 import sys
 import time
 import string
+# I am importing the os library to clear the screen after the user is done entering a customer's information. I don't like the way the terminal can look once it's filled with used inputs!
+import os 
+
+# Trying to use ANSII escape codes to format text in the terminal.
+# Define ANSI escape codes for colors
+RED = '\033[91m'
+RESET = '\033[0m'
 
 # Define program constants
 # Defining valid provinces.
@@ -33,40 +40,43 @@ while True:
     # User information inputs.
     print()
     # User name inputs.
-    first_name = "Brian" # input("Enter the customer's first name: ").title()
-    last_name =  "Janes" # input("Enter the customer's last name:  ").title()
+    first_name = input("Enter the customer's first name: ").title()
+    last_name =  input("Enter the customer's last name:  ").title()
 
     # User address input.
     print()
     while True:
-        address = "15 Horwood St." # input("Enter the customer's address: ").title()
+        address = input("Enter the customer's address: ").title()
         if not all(char in ALLOWED_CHARACTERS for char in address):
-            print("Data Entry Error - Invalid address. Please try again.")
+            print(RED + "Data Entry Error - Invalid address. Please try again." + RESET)
             continue
         else:
             break
 
     # User city input.
     while True:
-        city = "St. John's" # string.capwords(input("Enter the customer's city: "))
+        city = string.capwords(input("Enter the customer's city: "))
         if not all(char in ALLOWED_CHARACTERS for char in city):
-            print("Data Entry Error - Invalid city. Please try again.")
+            print(RED + "Data Entry Error - Invalid character used. Please try again." + RESET)
             continue
         else:
             break
 
     # Province input.
     while True:
-        province = "NL" # input("Enter the customer's province (2 letter abbreviation): ").upper()
-        if province not in PROVINCES:
-            print("Data Entry Error - Invalid province abbreviation. Please try again.")
+        province = input("Enter the customer's province (2 letter abbreviation): ")
+        validated_province = FV.validate_province(province)
+        # Check if the returned value is longer than 2 characters - this means it's an error message.
+        if len(validated_province) > 2:  
+            # Print error message in red text.
+            print(RED + validated_province + RESET) 
             continue
         else:
-            break
+            break  # Break the loop if the province is valid
 
     # Postal code input - Explained in FormatValues.py
     while True:
-        postal_code = "A1A1X4" # input("Enter the customer's postal code (X#X#X#): ")
+        postal_code = input("Enter the customer's postal code (X#X#X#): ")
         check_post_code = FV.check_postal_code(postal_code)
         if check_post_code == "Data Entry Error (Invalid postal code) - Character count issue. Please try again." or check_post_code == "Data Entry Error (Invalid postal code) - Alphabetical character issue. Please try again." or check_post_code == "Data Entry Error (Invalid postal code) - Numerical character issue. Please try again.":
             print(check_post_code)
@@ -78,7 +88,7 @@ while True:
     # Phone number input - Explained in FormatValues.py.
     while True:
         print()
-        phone_number = "7093257326" # input("Enter the customer's phone number (##########): ")
+        phone_number = input("Enter the customer's phone number (##########): ")
         # Check if the phone number is valid length, and all digits, return an error message if it's not & return the formatted phone number if it is.
         check_phone_num = FV.check_phone_num(phone_number)
         if check_phone_num == "Data Entry Error (Invalid phone number) - Character count issue. Please try again." or check_phone_num == "Data Entry Error (Invalid phone number) - Phone number must only be numerical values. Please try again.":
@@ -92,7 +102,7 @@ while True:
     print()
     while True:
         try:
-            num_cars_insured = 3 # int(input("Enter the number of cars to be insured: "))
+            num_cars_insured = int(input("Enter the number of cars to be insured: "))
             print()
             # Check if the number of cars insured is less than 1, return an error message if it is.
             if num_cars_insured < 1:
@@ -105,7 +115,7 @@ while True:
 
     # Extra liability input
     while True:
-        extra_liability = "Y" # input("Would you like to add extra liability coverage? (Y/N): ").upper()
+        extra_liability = input("Would you like to add extra liability coverage? (Y/N): ").upper()
         if extra_liability == "Y" or extra_liability == "N":
             # Display 'Yes' if the user enters 'Y', and 'No' if the user enters 'N'.
             extra_liability_display = "Yes" if extra_liability == "Y" else "No"
@@ -116,7 +126,7 @@ while True:
 
     # Glass coverage input
     while True:
-        glass_coverage = "Y" # input("Would you like to add glass coverage? (Y/N):           ").upper()
+        glass_coverage = input("Would you like to add glass coverage? (Y/N):           ").upper()
         if glass_coverage == "Y" or glass_coverage == "N":
             # Display 'Yes' if the user enters 'Y', and 'No' if the user enters 'N'.
             glass_coverage_display = "Yes" if glass_coverage == "Y" else "No"
@@ -127,7 +137,7 @@ while True:
 
     # Loaner car coverage input
     while True:
-        loaner_car = "Y" # input("Would you like to add loaner car coverage? (Y/N):      ").upper()
+        loaner_car = input("Would you like to add loaner car coverage? (Y/N):      ").upper()
         if loaner_car == "Y" or loaner_car == "N":
             # Display 'Yes' if the user enters 'Y', and 'No' if the user enters 'N'.
             loaner_car_display = "Yes" if loaner_car == "Y" else "No"
@@ -135,6 +145,32 @@ while True:
         else:
             print("Data Entry Error - Invalid input. Please enter 'Y' or 'N'.")
             continue
+
+    # Processing for policy information.
+    # Calculate insurance premium for the first automobile.
+    insurance_premium = BASIC_PREM_COST
+
+    # Calculate discount for additional automobiles.
+    if num_cars_insured > 1:
+        insurance_premium += (num_cars_insured - 1) * (BASIC_PREM_COST * XTRA_CAR_DISCOUNT_RATE)
+
+    # Calculate extra costs for additional options.
+    extra_costs = 0
+    if extra_liability == 'Y':
+        extra_costs += num_cars_insured * XTRA_LIABILITY_COST
+    if glass_coverage == 'Y':
+        extra_costs += num_cars_insured * GLASS_COVERAGE_COST
+    if loaner_car == 'Y':
+        extra_costs += num_cars_insured * LOANER_COST
+
+    # Calculate total insurance premium.
+    total_insurance_premium = insurance_premium + extra_costs
+
+    # Calculate HST.
+    hst_cost = total_insurance_premium * HST_RATE
+
+    # Calculate total cost. I have to perform this calculation here so that I can properly validate my downpayment amount.
+    total_cost = total_insurance_premium + hst_cost
     
     # Payment method input
     while True:
@@ -158,6 +194,7 @@ while True:
                     if down_payment <= 0:
                         print("Data Entry Error - Down payment cannot be less than or equal to 0. Please try again.")
                         continue
+                    # Here is where I am having issues. I need to check if the down payment is greater than the total cost, and return an error message if it is.
                     if down_payment > total_cost:
                         print("Data Entry Error - Down payment cannot be greater than the total cost. Please try again.")
                         continue
@@ -191,11 +228,12 @@ while True:
 
         while True:
             claim_date = input("Enter the claim date (YYYY-MM-DD): ")
-            try:
-                datetime.datetime.strptime(claim_date, '%Y-%m-%d')
+            validated_date = FV.check_date(claim_date)
+            if validated_date != "Data Entry Error (Invalid date) - Date must be in the format YYYY-MM-DD.":
                 break
-            except ValueError:
-                print("Data Entry Error - Invalid date format. Please enter a date in the format YYYY-MM-DD.")
+            else:
+                print(validated_date)
+                break
 
         while True:
             try:
@@ -225,34 +263,13 @@ while True:
         print()
         repeat = input("Do you want to enter another claim? (Y/N): ")
         if repeat.upper() != 'Y':
+            if os.name == 'nt':  # If the system is Windows
+                os.system('cls')
+            else:
+                os.system('clear')
             break
 
-    # Processing 
-    # Calculate insurance premium for the first automobile.
-    insurance_premium = BASIC_PREM_COST
-
-    # Calculate discount for additional automobiles.
-    if num_cars_insured > 1:
-        insurance_premium += (num_cars_insured - 1) * (BASIC_PREM_COST * XTRA_CAR_DISCOUNT_RATE)
-
-    # Calculate extra costs for additional options.
-    extra_costs = 0
-    if extra_liability == 'Y':
-        extra_costs += num_cars_insured * XTRA_LIABILITY_COST
-    if glass_coverage == 'Y':
-        extra_costs += num_cars_insured * GLASS_COVERAGE_COST
-    if loaner_car == 'Y':
-        extra_costs += num_cars_insured * LOANER_COST
-
-    # Calculate total insurance premium.
-    total_insurance_premium = insurance_premium + extra_costs
-
-    # Calculate HST.
-    hst_cost = total_insurance_premium * HST_RATE
-
-    # Calculate total cost.
-    total_cost = total_insurance_premium + hst_cost
-
+    # Procesing for payment type, invoice date, and premium cost (pre-tax)
     # Calculate monthly payment.
     if payment_method.upper() == 'FULL':
         monthly_payment = total_cost / 8
@@ -268,6 +285,7 @@ while True:
     invoice_date = datetime.datetime.now().strftime('%Y-%m-%d')
     first_payment_date = (datetime.datetime.now() + datetime.timedelta(days=30)).replace(day=1).strftime('%Y-%m-%d')
 
+    # Formatting
     # Formatting dollar values + other misc formatting.
     formatted_down_payment = FV.FDollar2(down_payment)
     formatted_insurance_premium = FV.FDollar2(insurance_premium)
@@ -303,10 +321,10 @@ while True:
 
     # Display Insurance Policy Information
     print()
-    print(f"    Number of Cars Insured:      {num_cars_insured:>2d}")
-    print(f"    Extra Liability Coverage:     {extra_liability_display:<3s}")
-    print(f"    Glass Coverage:               {glass_coverage_display:<3s}")
-    print(f"    Loaner Car Coverage:          {loaner_car_display:<3s}")
+    print(f"    Number of Cars Insured:         {num_cars_insured:>2d}")
+    print(f"    Extra Liability Coverage:        {extra_liability_display:<3s}")
+    print(f"    Glass Coverage:                  {glass_coverage_display:<3s}")
+    print(f"    Loaner Car Coverage:             {loaner_car_display:<3s}")
     print()
     # Formatting this string to the right for better consistent alignment.
     print(f"    Payment Method:             {payment_method:>8s}") 
@@ -333,15 +351,15 @@ while True:
         print(f"              No previous claims.")
         print()
     else:
-            print(f"      Claim #    Claim Date      Amount")
-            print(f"      ---------------------------------")
+            print(f"      Claim #   Claim Date      Amount")
+            print(f"      --------------------------------")
     for claim in claims:
-            print(f"      {claim['claim_number']}      {claim['claim_date']}  {claim['claim_amount']:>10s}")
+            print(f"      {claim['claim_number']}     {claim['claim_date']}  {claim['claim_amount']:>10s}")
     print(f"      ---------------------------------")
 
     # Display total insurance premium (pre-tax) and save policy data message
     print()
-    print(f"     Premium Cost (Pre-tax):  {formatted_pre_tax:>10s}")
+    print(f"      Premium Cost (Pre-tax):{formatted_pre_tax:>10s}")
     print()
 
     for _ in range(5):  # Change to control number of 'blinks'
@@ -363,4 +381,9 @@ while True:
     if repeat.upper() != 'Y':
         break
     else:
-        continue
+        if repeat.upper() != 'Y':
+            if os.name == 'nt':  # If the system is Windows
+                os.system('cls')
+            else:
+                os.system('clear')
+            break
