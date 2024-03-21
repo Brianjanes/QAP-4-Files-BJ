@@ -114,8 +114,7 @@ def check_postal_code(postal_code):
     else:
         # Insert space between the third and fourth characters to format the postal code
         formatted_postal_code = f"{normalized_postal_code[:3]} {normalized_postal_code[3:]}"
-        return formatted_postal_code
-
+        return formatted_postal_code.upper()
 
 # Formatting & validating phone numbers
 def format_phone_num(phone_num):
@@ -176,10 +175,33 @@ def validate_province(province):
     """
     Accepts a value and checks if it is a valid province abbreviation.
 
-    Returns a formatted province abbreviation or an error message.
+    Returns the province abbreviation if valid, otherwise returns None.
     """
     province = province.upper()
-    if province in ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"]:
-        return province
+    if province not in ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"]:
+        return None
     else:
-        return "Data Entry Error (Invalid province) - Please enter a valid province abbreviation."
+        return province.upper()
+    
+# Determine morning, afternoon, or evening based on time
+def time_of_day(current_hour):
+    """
+    Accepts a time in 24-hour format and returns the time of day as morning, afternoon, or evening.
+    """
+    # Define the time ranges for morning, afternoon, and night
+    # 6:00 AM to 11:59 AM
+    morning_range = range(6, 12)  
+    # 12:00 PM to 5:59 PM
+    afternoon_range = range(12, 18)  
+    # 6:00 PM to 11:59 PM
+    night_range = range(18, 24)  
+
+    # Determine whether it's morning, afternoon, or night
+    if current_hour in morning_range:
+        return "morning"
+    elif current_hour in afternoon_range:
+        return "afternoon"
+    elif current_hour in night_range:
+        return "evening"
+    else:
+        return "night"
