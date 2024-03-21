@@ -9,7 +9,7 @@ import sys
 import time
 import string
 # I am importing the os library to clear the screen after the user is done entering a customer's information. I don't like the way the terminal can look once it's filled with used inputs!
-import os 
+import os
 
 # Trying to use ANSII escape codes to format text in the terminal.
 # Define ANSI escape codes for colors
@@ -19,7 +19,8 @@ GREEN = "\033[32m"
 
 # Define program constants
 # Defining valid provinces.
-PROVINCES = ['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT']
+PROVINCES = ['AB', 'BC', 'MB', 'NB', 'NL', 'NS',
+             'NT', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT']
 # Defining valid payment methods.
 VALID_PAYMENT_METHODS = ['FULL', 'MONTHLY', 'DOWN PAY']
 
@@ -56,7 +57,8 @@ while True:
     while True:
         first_name = input("Enter the customer's first name: ").strip()
         if not first_name.isalpha():
-            print(f"{RED}Data Entry Error - First name must contain only alphabetic characters. Please try again.{RESET}")
+            print(
+                f"{RED}Data Entry Error - First name must contain only alphabetic characters. Please try again.{RESET}")
             continue
         else:
             break
@@ -66,22 +68,23 @@ while True:
         print()
         last_name = input("Enter the customer's last name:  ").strip()
         if not last_name.isalpha():
-            print(f"{RED}Data Entry Error - Last name must contain only alphabetic characters. Please try again.{RESET}")
+            print(
+                f"{RED}Data Entry Error - Last name must contain only alphabetic characters. Please try again.{RESET}")
             continue
         else:
             break
 
-
     # Formatting customer's full name.
     full_name = first_name.title() + " " + last_name.title()
-    
+
     # Pausing the program for 3 seconds to allow the user to read the information.
     print()
     print()
     for _ in range(2):  # Change to control number of 'blinks'
         print(f'{GREEN}    Processing Policy Information...{RESET}', end='\r')
         time.sleep(.3)  # To create the blinking effect
-        sys.stdout.write('\033[2K\r')  # Clears the entire line and carriage returns
+        # Clears the entire line and carriage returns
+        sys.stdout.write('\033[2K\r')
         time.sleep(.3)
 
     # Cleaning up the terminal for the user to move to address inputs.
@@ -100,7 +103,8 @@ while True:
         address = input("Enter the customer's address: ").title()
         if not all(char in ALLOWED_CHARACTERS for char in address):
             print()
-            print(f"{RED}Data Entry Error - Invalid address. Please try again.{RESET}")
+            print(
+                f"{RED}Data Entry Error - Invalid address. Please try again.{RESET}")
             continue
         else:
             break
@@ -111,7 +115,8 @@ while True:
         city = string.capwords(input("Enter the customer's city: "))
         if not all(char in ALLOWED_CHARACTERS for char in city):
             print()
-            print(f"{RED}Data Entry Error - Invalid character used. Please try again.{RESET}")
+            print(
+                f"{RED}Data Entry Error - Invalid character used. Please try again.{RESET}")
             continue
         else:
             break
@@ -119,15 +124,17 @@ while True:
     # Province input.
     while True:
         print()
-        province = input("Enter the customer's province (2 letter abbreviation): ")
+        province = input(
+            "Enter the customer's province (2 letter abbreviation): ")
         validated_province = FV.validate_province(province)
         if validated_province is None:
             print()
-            print(f"{RED}Data Entry Error - Please enter a valid province abbreviation.{RESET}") 
+            print(
+                f"{RED}Data Entry Error - Please enter a valid province abbreviation.{RESET}")
             continue
         else:
             province = validated_province
-            break 
+            break
 
     # Postal code input - Explained in FormatValues.py
     while True:
@@ -145,7 +152,8 @@ while True:
     # Phone number input - Explained in FormatValues.py.
     while True:
         print()
-        phone_number = input("Enter the customer's phone number (##########): ")
+        phone_number = input(
+            "Enter the customer's phone number (##########): ")
         # Check if the phone number is valid length, and all digits, return an error message if it's not & return the formatted phone number if it is.
         check_phone_num = FV.check_phone_num(phone_number)
         if check_phone_num == "Data Entry Error (Invalid phone number) - Character count issue. Please try again." or check_phone_num == "Data Entry Error (Invalid phone number) - Phone number must only be numerical values. Please try again.":
@@ -155,8 +163,9 @@ while True:
         else:
             phone_number = check_phone_num
             break
-    
-    formatted_extra_car_discount_rate = "{:.0f}%".format(XTRA_CAR_DISCOUNT_RATE * 100)
+
+    formatted_extra_car_discount_rate = "{:.0f}%".format(
+        XTRA_CAR_DISCOUNT_RATE * 100)
 
     # Pausing the program for 3 seconds to allow the user to read the information.
     print()
@@ -164,7 +173,8 @@ while True:
     for _ in range(3):  # Change to control number of 'blinks'
         print(f"{GREEN}    Processing Policy Information...{RESET}", end='\r')
         time.sleep(.3)  # To create the blinking effect
-        sys.stdout.write('\033[2K\r')  # Clears the entire line and carriage returns
+        # Clears the entire line and carriage returns
+        sys.stdout.write('\033[2K\r')
         time.sleep(.3)
 
     # Insurance policy information inputs.
@@ -179,24 +189,29 @@ while True:
     print()
     while True:
         try:
-            num_cars_insured = int(input("Enter the number of cars to be insured: "))
+            num_cars_insured = int(
+                input("Enter the number of cars to be insured: "))
             print()
             # Check if the number of cars insured is less than 1, return an error message if it is.
             if num_cars_insured < 1:
                 print()
-                print(RED + "Data Entry Error - Number of cars insured cannot be less than 1. Please try again." + RESET)
+                print(
+                    RED + "Data Entry Error - Number of cars insured cannot be less than 1. Please try again." + RESET)
                 continue
             elif num_cars_insured > 1:
                 print(f"{GREEN}You have entered {num_cars_insured} cars to be insured. This qualifies you for a {formatted_extra_car_discount_rate} discount!{RESET}")
                 print()
                 break
             elif num_cars_insured == 1:
-                print(f"{RED}You have entered {num_cars_insured} vehicle to be insured.")
-                add_another_vehicle = input(f"Would you like to add another vehicle to qualify for a {formatted_extra_car_discount_rate} discount? (Y/N): ").upper()
+                print(
+                    f"{RED}You have entered {num_cars_insured} vehicle to be insured.")
+                add_another_vehicle = input(
+                    f"Would you like to add another vehicle to qualify for a {formatted_extra_car_discount_rate} discount? (Y/N): ").upper()
                 print()
                 if add_another_vehicle == "Y":
                     print()
-                    print(f"{GREEN}You have chosen to add another vehicle. This qualifies you for a {formatted_extra_car_discount_rate} discount!{RESET}")
+                    print(
+                        f"{GREEN}You have chosen to add another vehicle. This qualifies you for a {formatted_extra_car_discount_rate} discount!{RESET}")
                     print()
                     num_cars_insured += 1
                     break
@@ -213,16 +228,19 @@ while True:
                     continue
         except ValueError:
             print()
-            print(f"{RED}Data Entry Error - Number of cars insured must be a valid integer. Please try again.{RESET}")
+            print(
+                f"{RED}Data Entry Error - Number of cars insured must be a valid integer. Please try again.{RESET}")
 
     # Extra liability input
     while True:
-        extra_liability = input("Would you like to add extra liability coverage? (Y/N): ").upper()
+        extra_liability = input(
+            "Would you like to add extra liability coverage? (Y/N): ").upper()
         if extra_liability == "Y":
             # Display 'Yes' if the user enters 'Y'
             extra_liability_display = "Yes"
             # Adding a coloured confirmation message to the user.
-            print(f"{GREEN}Added liability coverage up to $1,000,000 to your policy.{RESET}")
+            print(
+                f"{GREEN}Added liability coverage up to $1,000,000 to your policy.{RESET}")
             print()
             break
         elif extra_liability == "N":
@@ -234,12 +252,14 @@ while True:
             break
         else:
             print()
-            print(f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
+            print(
+                f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
             continue
 
     # Glass coverage input
     while True:
-        glass_coverage = input("Would you like to add glass coverage? (Y/N):           ").upper()
+        glass_coverage = input(
+            "Would you like to add glass coverage? (Y/N):           ").upper()
         if glass_coverage == "Y":
             # Display 'Yes' if the user enters 'Y'.
             glass_coverage_display = "Yes"
@@ -256,12 +276,14 @@ while True:
             break
         else:
             print()
-            print(f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
+            print(
+                f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
             continue
 
     # Loaner car coverage input
     while True:
-        loaner_car = input("Would you like to add loaner car coverage? (Y/N):      ").upper()
+        loaner_car = input(
+            "Would you like to add loaner car coverage? (Y/N):      ").upper()
         if loaner_car == "Y":
             # Display 'Yes' if the user enters 'Y'.
             loaner_car_display = "Yes"
@@ -278,16 +300,18 @@ while True:
             break
         else:
             print()
-            print(f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
+            print(
+                f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
             continue
-    
+
     # Pausing the program for 3 seconds to allow the user to read the information.
     print()
     print()
     for _ in range(3):  # Change to control number of 'blinks'
         print(f"{GREEN}    Processing Policy Information...{RESET}", end='\r')
         time.sleep(.3)  # To create the blinking effect
-        sys.stdout.write('\033[2K\r')  # Clears the entire line and carriage returns
+        # Clears the entire line and carriage returns
+        sys.stdout.write('\033[2K\r')
         time.sleep(.3)
 
     # Processing for policy information.
@@ -296,7 +320,8 @@ while True:
 
     # Calculate discount for additional automobiles.
     if num_cars_insured > 1:
-        insurance_premium += (num_cars_insured - 1) * (BASIC_PREM_COST * XTRA_CAR_DISCOUNT_RATE)
+        insurance_premium += (num_cars_insured - 1) * \
+            (BASIC_PREM_COST * XTRA_CAR_DISCOUNT_RATE)
 
     # Calculate extra costs for additional options.
     extra_costs = 0
@@ -315,19 +340,22 @@ while True:
 
     # Calculate total cost. I have to perform this calculation here so that I can properly validate my downpayment amount.
     total_cost = total_insurance_premium + hst_cost
-    
+
     # Payment method input
     # I chose to do this after some amount of processing so that I could vailidate the down payment amount against the total cost. The downpayment can't be greater than total cost!
     while True:
         # Initialize down payment to 0.
         down_payment = 0
-        payment_method = input("Enter the payment method (Full, Monthly, or Down Pay): ").title()
+        payment_method = input(
+            "Enter the payment method (Full, Monthly, or Down Pay): ").title()
 
         # Check if the payment method is valid by cross-referencing with the list of valid payment methods.
         while payment_method.upper() not in VALID_PAYMENT_METHODS:
             print()
-            print(f"{RED}Data Entry Error - Invalid payment method. Please enter a valid payment method.{RESET}")
-            payment_method = input("Enter the payment method (Full, Monthly, or Down Pay): ").title()
+            print(
+                f"{RED}Data Entry Error - Invalid payment method. Please enter a valid payment method.{RESET}")
+            payment_method = input(
+                "Enter the payment method (Full, Monthly, or Down Pay): ").title()
 
         # If the payment method is 'Down Pay', ask the user to enter the down payment amount.
         if payment_method.upper() == 'DOWN PAY':
@@ -335,25 +363,30 @@ while True:
                 try:
                     # Ask the user to enter the down payment amount.
                     print()
-                    down_payment = float(input("Enter the amount of the down payment: $"))
+                    down_payment = float(
+                        input("Enter the amount of the down payment: $"))
                     # Check if the down payment is valid.
                     if down_payment <= 0:
                         print()
-                        print(f"{RED}Data Entry Error - Down payment cannot be less than or equal to 0. Please try again.{RESET}")
+                        print(
+                            f"{RED}Data Entry Error - Down payment cannot be less than or equal to 0. Please try again.{RESET}")
                         continue
                     # Here is where I am having issues. I need to check if the down payment is greater than the total cost, and return an error message if it is.
                     if down_payment > total_cost:
                         print()
-                        print(f"{RED}Data Entry Error - Down payment cannot be greater than the total cost. Please try again.{RESET}")
+                        print(
+                            f"{RED}Data Entry Error - Down payment cannot be greater than the total cost. Please try again.{RESET}")
                         continue
                     print()
-                    print(f"{GREEN}You have chosen our Down Payment option. {RESET}")
+                    print(
+                        f"{GREEN}You have chosen our Down Payment option. {RESET}")
                     print()
-                    break  
+                    break
                 except ValueError:
                     print()
-                    print(f"{RED}Data Entry Error - Invalid input. Please enter a valid numerical value.{RESET}")
-            break  
+                    print(
+                        f"{RED}Data Entry Error - Invalid input. Please enter a valid numerical value.{RESET}")
+            break
         elif payment_method.upper() == 'FULL' or payment_method.upper() == 'MONTHLY':
             if payment_method.upper() == 'FULL':
                 print()
@@ -364,14 +397,15 @@ while True:
                 print(f"{GREEN}You have chosen our Monthly payment option. {RESET}")
                 print()
             break
-    
+
     # Pausing the program for 3 seconds to allow the user to read the information.
     print()
     print()
     for _ in range(3):  # Change to control number of 'blinks'
         print(f"{GREEN}    Processing Policy Information...{RESET}", end='\r')
         time.sleep(.3)  # To create the blinking effect
-        sys.stdout.write('\033[2K\r')  # Clears the entire line and carriage returns
+        # Clears the entire line and carriage returns
+        sys.stdout.write('\033[2K\r')
         time.sleep(.3)
 
     # Claims information inputs.
@@ -389,19 +423,22 @@ while True:
         print("==============================================================")
         print()
         print()
-        claim_number = input("Enter the claim number (#####) (type 'DONE' to finish): ")
+        claim_number = input(
+            "Enter the claim number (#####) (type 'DONE' to finish): ")
         if claim_number.upper() == 'DONE':
             break
         else:
             # Check if the claim number is 5 characters long, return an error message if it's not.
             if len(claim_number) != 5:
                 print()
-                print(f"{RED}Data Entry Error - Invalid claim number. Please enter a 5-digit number.{RESET}")
+                print(
+                    f"{RED}Data Entry Error - Invalid claim number. Please enter a 5-digit number.{RESET}")
                 continue
             # Check if the claim number is a valid number, return an error message if it's not.
             elif not claim_number.isdigit():
                 print()
-                print(f"{RED}Data Entry Error - Invalid claim number. Please enter a numerical value.{RESET}")
+                print(
+                    f"{RED}Data Entry Error - Invalid claim number. Please enter a numerical value.{RESET}")
                 continue
 
         while True:
@@ -410,7 +447,7 @@ while True:
             if validated_date != "Data Entry Error (Invalid date) - Date must be in the format YYYY-MM-DD.":
                 break
             else:
-                print() 
+                print()
                 print(f"{RED} + {validated_date} + {RESET}")
 
         while True:
@@ -419,12 +456,14 @@ while True:
                 # Check if the claim amount is greater than 0, return an error message if it's not.
                 if claim_amount <= 0:
                     print()
-                    print(f"{RED}Data Entry Error - Claim amount must be greater than 0. Please try again.{RESET}")
+                    print(
+                        f"{RED}Data Entry Error - Claim amount must be greater than 0. Please try again.{RESET}")
                     continue
                 break
             except ValueError:
                 print()
-                print(f"{RED}Data Entry Error - Invalid input. Please enter a valid numerical value.{RESET}")
+                print(
+                    f"{RED}Data Entry Error - Invalid input. Please enter a valid numerical value.{RESET}")
 
         # Format the claim amount to a dollar value.
         formatted_claim_amount = FV.FDollar2(claim_amount)
@@ -452,7 +491,8 @@ while True:
             break
         else:
             print()
-            print(f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
+            print(
+                f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
 
     # Procesing for payment type, invoice date, and premium cost (pre-tax)
     # Calculate monthly payment.
@@ -461,14 +501,16 @@ while True:
     elif payment_method.upper() == 'MONTHLY':
         monthly_payment = (total_cost + MONTHLY_PRCSSING_FEE) / 8
     elif payment_method.upper() == 'DOWN PAY':
-        monthly_payment = (total_cost - down_payment + MONTHLY_PRCSSING_FEE) / 8
+        monthly_payment = (total_cost - down_payment +
+                           MONTHLY_PRCSSING_FEE) / 8
 
     # Calculate total insurance premium (pre-tax)
     total_insurance_premium_pretax = insurance_premium + extra_costs
 
     # Calculate invoice date and first payment date.
     invoice_date = datetime.datetime.now().strftime('%Y-%m-%d')
-    first_payment_date = (datetime.datetime.now() + datetime.timedelta(days=30)).replace(day=1).strftime('%Y-%m-%d')
+    first_payment_date = (datetime.datetime.now(
+    ) + datetime.timedelta(days=30)).replace(day=1).strftime('%Y-%m-%d')
 
     # Formatting
     # Formatting dollar values + other misc formatting.
@@ -485,9 +527,11 @@ while True:
     for _ in range(4):
         print(f"{GREEN}        PROCESSING YOUR RECEIPT{RESET}", end='\r')
         time.sleep(.3)
-        sys.stdout.flush()  # Flush the output buffer to make sure the message is displayed immediately
+        # Flush the output buffer to make sure the message is displayed immediately
+        sys.stdout.flush()
         time.sleep(0.3)
-        sys.stdout.write('\033[2K\r')  # Clears the entire line and carriage returns
+        # Clears the entire line and carriage returns
+        sys.stdout.write('\033[2K\r')
         time.sleep(.3)
 
     # Display receipt.
@@ -514,12 +558,14 @@ while True:
     print("============================================")
     print()
     print(f"    Number of Cars Insured:            {num_cars_insured:>2d}")
-    print(f"    Extra Liability Coverage:         {extra_liability_display:<3s}")
-    print(f"    Glass Coverage:                   {glass_coverage_display:<3s}")
+    print(
+        f"    Extra Liability Coverage:         {extra_liability_display:<3s}")
+    print(
+        f"    Glass Coverage:                   {glass_coverage_display:<3s}")
     print(f"    Loaner Car Coverage:              {loaner_car_display:<3s}")
     print()
     # Formatting this string to the right for better consistent alignment.
-    print(f"    Payment Method:              {payment_method:>8s}") 
+    print(f"    Payment Method:              {payment_method:>8s}")
     # Display Down Payment if payment method is 'Down Pay'.
     if payment_method.upper() == 'DOWN PAY':
         print(f"    Down Payment:              {formatted_down_payment:>10s}")
@@ -541,12 +587,13 @@ while True:
         print(f"              No previous claims.")
         print()
     else:
-            print(f"      Claim #   Claim Date      Amount")
-            print(f"      --------------------------------")
+        print(f"      Claim #   Claim Date      Amount")
+        print(f"      --------------------------------")
     for claim in claims:
-            print()
-            print(f"      {claim['claim_number']}     {claim['claim_date']}  {claim['claim_amount']:>10s}")
-            print()
+        print()
+        print(
+            f"      {claim['claim_number']}     {claim['claim_date']}  {claim['claim_amount']:>10s}")
+        print()
     print(f"      --------------------------------")
 
     # Display total insurance premium (pre-tax) and save policy data message
@@ -557,10 +604,11 @@ while True:
     for _ in range(5):  # Change to control number of 'blinks'
         print("          Saving claim data...", end='\r')
         time.sleep(.3)  # To create the blinking effect
-        sys.stdout.write('\033[2K\r')  # Clears the entire line and carriage returns
+        # Clears the entire line and carriage returns
+        sys.stdout.write('\033[2K\r')
         time.sleep(.3)
     print()
-    print(GREEN +"      Policy data - successfully saved", end='\r' + RESET)
+    print(GREEN + "      Policy data - successfully saved", end='\r' + RESET)
     print()
 
     # Increment the policy number by 1.
@@ -570,13 +618,14 @@ while True:
     # Ask the user if they want to enter another customer
     print()
     while True:
-        repeat = input(f"{RED}Do you want to enter another customer? (Y/N): {RESET}").upper()
+        repeat = input(
+            f"{RED}Do you want to enter another customer? (Y/N): {RESET}").upper()
         print()
         if repeat == 'Y':
             if os.name == 'nt':  # If the system is Windows
                 os.system('cls')
             else:
-                os.system('clear') 
+                os.system('clear')
             break
         elif repeat == 'N':
             if os.name == 'nt':  # If the system is Windows
@@ -588,4 +637,5 @@ while True:
             exit()
         else:
             print()
-            print(f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
+            print(
+                f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")

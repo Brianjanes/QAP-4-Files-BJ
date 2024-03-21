@@ -1,6 +1,7 @@
 # Importing required modules.
 import datetime
 
+
 def FDollar2(DollarValue):
     # Function will accept a value and format it to $#,###.##.
 
@@ -83,6 +84,8 @@ def FDateL(DateValue):
 # Brian'a Additions to this file.
 
 # Formatting & validating postal codes
+
+
 def format_postal_code(postal_code):
     """
     Accepts a value that has already been validated through the check_post_code function and format it to X#X #X#.
@@ -90,10 +93,13 @@ def format_postal_code(postal_code):
     Returns a formatted postal code.
     """
     postal_code = postal_code.upper()
-    formatted_postal_code = postal_code[0] + postal_code[1] + postal_code[2] + " " + postal_code[3] + postal_code[4] + postal_code[5]
+    formatted_postal_code = postal_code[0] + postal_code[1] + \
+        postal_code[2] + " " + postal_code[3] + postal_code[4] + postal_code[5]
     return formatted_postal_code
 
 # Formatting & validating postal codes
+
+
 def check_postal_code(postal_code):
     """
     Accepts a value and checks if it is a valid postal code in terms of character count, alphabetical characters,
@@ -103,7 +109,7 @@ def check_postal_code(postal_code):
     """
     # Remove any non-alphanumeric characters from the postal code with filter and isalnum - very cool
     normalized_postal_code = ''.join(filter(str.isalnum, postal_code))
-    
+
     # Check if the normalized postal code has the correct length and format
     if len(normalized_postal_code) != 6:
         return "Data Entry Error (Invalid postal code) - Postal code must be 6 characters long. Please try again."
@@ -117,16 +123,21 @@ def check_postal_code(postal_code):
         return formatted_postal_code.upper()
 
 # Formatting & validating phone numbers
+
+
 def format_phone_num(phone_num):
     """
     Accepts a value that has already been validated through the check_phone_num function and format it to (###) ###-####.
 
     Returns a formatted phone number.
     """
-    formatted_phone_num = "(" + phone_num[0:3] + ") " + phone_num[3:6] + "-" + phone_num[6:10]
+    formatted_phone_num = "(" + phone_num[0:3] + ") " + \
+        phone_num[3:6] + "-" + phone_num[6:10]
     return formatted_phone_num
 
 # Formatting & validating phone numbers
+
+
 def check_phone_num(phone_num):
     """
     Accepts a value and checks if it is a valid phone number in terms of character count and numerical characters.
@@ -139,8 +150,10 @@ def check_phone_num(phone_num):
         return "Data Entry Error (Invalid phone number) - Phone number must only be numerical values. Please try again."
     else:
         return format_phone_num(phone_num)
-    
+
 # Formatting & validatng dates to YYYY-MM-DD format.
+
+
 def format_date(date):
     """
     Accepts a value that has already been validated through the check_date function and format it to YYYY-MM-DD.
@@ -151,6 +164,8 @@ def format_date(date):
     return formatted_date
 
 # Validating dates in YYYY-MM-DD format.
+
+
 def check_date(date):
     """
     Accepts a value and checks if it is a valid date in terms of character count,
@@ -171,6 +186,8 @@ def check_date(date):
             return "Data Entry Error (Invalid date) - Date values are out of range."
 
 # Validating province
+
+
 def validate_province(province):
     """
     Accepts a value and checks if it is a valid province abbreviation.
@@ -182,19 +199,21 @@ def validate_province(province):
         return None
     else:
         return province.upper()
-    
+
 # Determine morning, afternoon, or evening based on time
+
+
 def time_of_day(current_hour):
     """
     Accepts a time in 24-hour format and returns the time of day as morning, afternoon, or evening.
     """
     # Define the time ranges for morning, afternoon, and night
     # 6:00 AM to 11:59 AM
-    morning_range = range(6, 12)  
+    morning_range = range(6, 12)
     # 12:00 PM to 5:59 PM
-    afternoon_range = range(12, 18)  
+    afternoon_range = range(12, 18)
     # 6:00 PM to 11:59 PM
-    night_range = range(18, 24)  
+    night_range = range(18, 24)
 
     # Determine whether it's morning, afternoon, or night
     if current_hour in morning_range:
