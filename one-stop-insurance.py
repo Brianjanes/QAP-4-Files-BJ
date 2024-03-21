@@ -358,7 +358,6 @@ while True:
             if payment_method.upper() == 'FULL':
                 print()
                 print(f"{GREEN}You have chosen our Full payment option. {RESET}")
-                print(f"{GREEN}You will be required to pay the full amount after we have your policy in order. {RESET}")
                 print()
             elif payment_method.upper() == 'MONTHLY':
                 print()
