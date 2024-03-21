@@ -126,6 +126,7 @@ while True:
             print(f"{RED}Data Entry Error - Please enter a valid province abbreviation.{RESET}") 
             continue
         else:
+            province = validated_province
             break 
 
     # Postal code input - Explained in FormatValues.py
@@ -570,22 +571,22 @@ while True:
     # Ask the user if they want to enter another customer
     print()
     while True:
-        repeat = input(f"{RED}Do you want to enter another customer? (Y/N):{RESET}").upper()
+        repeat = input(f"{RED}Do you want to enter another customer? (Y/N): {RESET}").upper()
         print()
         if repeat == 'Y':
             if os.name == 'nt':  # If the system is Windows
                 os.system('cls')
             else:
-                os.system('clear')
-            break  
+                os.system('clear') 
+            break
         elif repeat == 'N':
             if os.name == 'nt':  # If the system is Windows
                 os.system('cls')
             else:
                 os.system('clear')
-            break  
+            print()
+            print(f"{GREEN}Thank you for using One Stop Insurance Group!{RESET}")
+            exit()
         else:
             print()
             print(f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
-
-
