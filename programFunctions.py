@@ -299,7 +299,7 @@ def get_insurance_info(full_name, discount_rate):
             # Adding a coloured confirmation message to the user.
             print()
             print(
-                f"{GREEN}Added liability coverage up to $1,000,000 to your policy.{RESET}"
+                f"{GREEN}Extra liability coverage up to $1,000,000 has been added to your policy.{RESET}"
             )
             print()
         elif extra_liability == "N":
@@ -307,7 +307,8 @@ def get_insurance_info(full_name, discount_rate):
             extra_liability_display = "No"
             # Adding a coloured confirmation message to the user.
             print()
-            print(f"{RED}No extra liability coverage added to your policy.{RESET}")
+            print(
+                f"{RED}Extra liability coverage has not been added to your policy.{RESET}")
             print()
         break
 
@@ -328,7 +329,7 @@ def get_insurance_info(full_name, discount_rate):
             # Adding a confirmation message to the user.
             print()
             print(
-                f"{GREEN}Added Glass coverage to your policy.{RESET}"
+                f"{GREEN}Glass coverage has been added to your policy.{RESET}"
             )
             print()
         elif glass_coverage == "N":
@@ -336,7 +337,7 @@ def get_insurance_info(full_name, discount_rate):
             glass_coverage_display = "No"
             # Adding a confirmation message to the user.
             print()
-            print(f"{RED}No glass coverage added to your policy.{RESET}")
+            print(f"{RED}Glass coverage had not been added to your policy.{RESET}")
             print()
         break
 
@@ -356,14 +357,15 @@ def get_insurance_info(full_name, discount_rate):
             loaner_car_display = "Yes"
             # Adding a confirmation message to the user.
             print()
-            print(f"{GREEN}Added Loaner car coverage to your policy.{RESET}")
+            print(f"{GREEN}Loaner car coverage has been added to your policy.{RESET}")
             print()
         elif loaner_car == "N":
             # Display 'No' if the user enters 'N'.
             loaner_car_display = "No"
             # Adding a confirmation message to the user.
             print()
-            print(f"{RED}No loaner car coverage added to your policy.{RESET}")
+            print(
+                f"{RED}Loaner car coverage has not been added to your policy.{RESET}")
             print()
         break
 
@@ -379,7 +381,7 @@ def get_payment_method(full_name, total_cost, processing_fee):
 
     Returns the payment method and if necessary the down payment amount.
     """
-    VALID_PAYMENT_METHODS = ["FULL", "MONTHLY", "DOWN PAY"]
+    VALID_PAYMENT_METHODS = ["FULL", "MONTHLY", "DOWN PAY", "F", "M", "D"]
     down_payment_amt = 0
 
     print()
@@ -390,15 +392,16 @@ def get_payment_method(full_name, total_cost, processing_fee):
     print()
     print()
     while True:
+        print(f"{GREEN}    You can use F, M, or D for short.{RESET}")
+        print()
         payment_method = input(
             "  Enter the payment method (Full, Monthly, or Down Pay): ").upper()
-
         if payment_method not in VALID_PAYMENT_METHODS:
             print(
                 f"{RED}Data Entry Error - Invalid payment method. Please enter a valid payment method.{RESET}")
             continue
 
-        elif payment_method == "DOWN PAY":
+        elif payment_method == "DOWN PAY" or payment_method == "D":
             while True:
                 try:
                     print()
@@ -427,14 +430,24 @@ def get_payment_method(full_name, total_cost, processing_fee):
             print()
             print(
                 f"{GREEN}You have chosen our {payment_method} payment option. {RESET}")
+        elif payment_method == "F":
+            payment_method = "Full"
+            print()
+            print(
+                f"{GREEN}You have chosen our {payment_method} payment option. {RESET}")
+        elif payment_method == "M":
+            payment_method = "Monthly"
+            print()
+            print(
+                f"{GREEN}You have chosen our {payment_method} payment option. {RESET}")
 
         monthly_payment = 0
         # Calculate monthly payment.
-        if payment_method == "Full":
+        if payment_method == "Full" or payment_method == "F":
             monthly_payment = total_cost / 8
-        elif payment_method == "Monthly":
+        elif payment_method == "Monthly" or payment_method == "M":
             monthly_payment = (total_cost + processing_fee) / 8
-        elif payment_method == "Down Pay":
+        elif payment_method == "Down Pay" or payment_method == "D":
             monthly_payment = (
                 total_cost - down_payment_amt + processing_fee) / 8
 
