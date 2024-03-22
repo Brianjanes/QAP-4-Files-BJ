@@ -2,13 +2,13 @@
 
 ## Description
 
-This program is designed for the One Stop Insurance Company to enter and calculate insurance policy information for its new customers. It collects customer information such as name, address, and contact details, as well as insurance policy details including the number of cars insured, additional coverage options, and payment method. The program calculates insurance premiums, taxes, and monthly payments based on user input. Additionally, it allows users to input claims information and generates a policy information receipt for each customer.
+This program is designed for the One Stop Insurance Company to enter and calculate insurance policy information for its new customers. It collects customer information such as name, address, and contact details, as well as insurance policy details including the number of cars insured, additional coverage options, and payment method. The program calculates insurance premiums, taxes, and monthly payments based on user input. Additionally, it allows users to input claims information and generates a policy information receipt for each customer. The program saves the calculated values along with the user's input information to a .dat file for storage and to be able to reference it later.
 
 ## Author
 
 - **Author:** Brian Janes
 - **Start Date:** March 17th, 2024
-- **End Date:** March 21st, 2024
+- **End Date:** March 22nd, 2024
 
 ## Features
 
@@ -18,6 +18,7 @@ This program is designed for the One Stop Insurance Company to enter and calcula
 - Validates user inputs to ensure data integrity.
 - Generates policy information receipts with detailed breakdowns of costs.
 - Supports input of claims information.
+- Writes all policy data to Policies.dat file.
 
 ## Requirements
 
