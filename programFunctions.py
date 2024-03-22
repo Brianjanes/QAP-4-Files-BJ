@@ -81,7 +81,7 @@ def get_customer_full_name():
     print()
     print()
     while True:
-        first_name = input("Enter the customer's first name: ").strip()
+        first_name = input("  Enter the customer's first name: ").strip()
         if first_name.isalpha():
             break
         print(
@@ -91,7 +91,7 @@ def get_customer_full_name():
     # Last name input - strip the strong and check for only alphabetic characters.
     while True:
         print()
-        last_name = input("Enter the customer's last name:  ").strip()
+        last_name = input("  Enter the customer's last name:  ").strip()
         if last_name.isalpha():
             break
         print(
@@ -145,7 +145,7 @@ def get_customer_info(current_hour, full_name):
     print()
     # User address input.
     while True:
-        address = input("Enter the customer's address: ").title()
+        address = input("  Enter the customer's address: ").title()
         if all(char in ALLOWED_CHARACTERS for char in address):
             break
         print()
@@ -154,7 +154,7 @@ def get_customer_info(current_hour, full_name):
     # User city input.
     while True:
         print()
-        city = string.capwords(input("Enter the customer's city: "))
+        city = string.capwords(input("  Enter the customer's city: "))
         if not all(char in ALLOWED_CHARACTERS for char in city):
             print()
             print(
@@ -167,7 +167,7 @@ def get_customer_info(current_hour, full_name):
     while True:
         print()
         province = input(
-            "Enter the customer's province (2 letter abbreviation): ")
+            "  Enter the customer's province (2 letter abbreviation): ")
         validated_province = FV.validate_province(province)
         if validated_province:
             province = validated_province
@@ -180,7 +180,7 @@ def get_customer_info(current_hour, full_name):
     # Postal code input - Explained in FormatValues.py
     while True:
         print()
-        postal_code = input("Enter the customer's postal code (X#X#X#): ")
+        postal_code = input("  Enter the customer's postal code (X#X#X#): ")
         check_post_code = FV.check_postal_code(postal_code)
         if check_post_code.startswith("Data Entry Error"):
             print()
@@ -193,7 +193,7 @@ def get_customer_info(current_hour, full_name):
     while True:
         print()
         phone_number = input(
-            "Enter the customer's phone number (##########): ")
+            "  Enter the customer's phone number (##########): ")
         # Check if the phone number is valid length, and all digits, return an error message if it's not & return the formatted phone number if it is.
         validated_phone_num = FV.check_phone_num(phone_number)
         if len(validated_phone_num) != 14:
@@ -226,7 +226,7 @@ def get_insurance_info(full_name, discount_rate):
     while True:
         try:
             num_cars_insured = int(
-                input("Enter the number of cars to be insured: "))
+                input("  Enter the number of cars to be insured: "))
             print()
             # Check if the number of cars insured is less than 1, return an error message if it is.
             if num_cars_insured < 1:
@@ -245,7 +245,7 @@ def get_insurance_info(full_name, discount_rate):
                     f"{RED}You have entered {num_cars_insured} vehicle to be insured."
                 )
                 add_another_vehicle = input(
-                    f"Would you like to add another vehicle to qualify for a {discount_rate} discount? (Y/N): "
+                    f"  Would you like to add another vehicle to qualify for a {discount_rate} discount? (Y/N): "
                 ).upper()
                 print()
                 if add_another_vehicle == "Y":
@@ -278,7 +278,7 @@ def get_insurance_info(full_name, discount_rate):
     # Extra liability coverage input
     while True:
         extra_liability = input(
-            "Would you like to add extra liability coverage? (Y/N): "
+            "  Would you like to add extra liability coverage? (Y/N): "
         ).upper()
         if extra_liability != "Y" and extra_liability != "N":
             print()
@@ -305,7 +305,7 @@ def get_insurance_info(full_name, discount_rate):
     # Glass coverage input
     while True:
         glass_coverage = input(
-            "Would you like to add glass coverage? (Y/N):           "
+            "  Would you like to add glass coverage? (Y/N):           "
         ).upper()
         if glass_coverage != "Y" and glass_coverage != "N":
             print()
@@ -332,7 +332,7 @@ def get_insurance_info(full_name, discount_rate):
     # Loaner car coverage input
     while True:
         loaner_car = input(
-            "Would you like to add loaner car coverage? (Y/N):      "
+            "  Would you like to add loaner car coverage? (Y/N):      "
         ).upper()
         if loaner_car != "Y" and loaner_car != "N":
             print()
@@ -378,7 +378,7 @@ def get_payment_method(full_name, total_cost, processing_fee):
     print()
     while True:
         payment_method = input(
-            "Enter the payment method (Full, Monthly, or Down Pay): ").upper()
+            "  Enter the payment method (Full, Monthly, or Down Pay): ").upper()
 
         if payment_method not in VALID_PAYMENT_METHODS:
             print(
@@ -387,7 +387,7 @@ def get_payment_method(full_name, total_cost, processing_fee):
             while True:
                 try:
                     down_payment_amt = float(
-                        input("Enter the amount of the down payment: $"))
+                        input("  Enter the amount of the down payment: $"))
                     if down_payment_amt <= 0:
                         print(
                             f"{RED}Data Entry Error - Down payment cannot be less than or equal to 0. Please try again.{RESET}")
@@ -443,7 +443,7 @@ def get_claims():
         while True:
             print()
             claim_number = input(
-                "Enter the claim number (#####) (type 'DONE' to finish): ")
+                "  Enter the claim number (#####) (type 'DONE' to finish): ")
             if claim_number.upper() == "DONE":
                 return claims  # Exiting the entire function when done.
             if len(claim_number) == 5 and claim_number.isdigit():
@@ -457,7 +457,7 @@ def get_claims():
 
         while True:
             print()
-            claim_date = input("Enter the claim date (YYYY-MM-DD): ")
+            claim_date = input("  Enter the claim date (YYYY-MM-DD): ")
             validated_date = FV.check_date(claim_date)
             if not validated_date.startswith("Data Entry Error"):
                 break
@@ -486,7 +486,7 @@ def get_claims():
 
         print()
         repeat = input(
-            f"{GREEN}Do you want to enter another claim? (Y/N): {RESET}")
+            f"{GREEN}  Do you want to enter another claim? (Y/N): {RESET}")
         if repeat.upper() == "N":
             break  # Exit the loop after no more claims are to be entered.
         elif repeat.upper() != "Y":
@@ -524,8 +524,9 @@ def repeat_program():
     """
     print()
     while True:
+        print()
         repeat = input(
-            f"{RED}Do you want to enter another customer? (Y/N): {RESET}"
+            f"{RED}  Do you want to enter another customer? (Y/N): {RESET}"
         ).upper()
         print()
         if repeat == "Y":

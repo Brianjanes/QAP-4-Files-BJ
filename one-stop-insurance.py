@@ -14,7 +14,7 @@ RESET = "\033[0m"
 GREEN = "\033[32m"
 
 # Define program constants
-
+# Using a Defaults file to store the default values for the program.
 f = open("Default.dat", "r")
 POLICY_NUM = int(f.readline())
 BASIC_PREM_COST = float(f.readline())
@@ -26,13 +26,12 @@ HST_RATE = float(f.readline())
 MONTHLY_PRCSSING_FEE = float(f.readline())
 f.close()
 
-# Formatting this for the next function.
+# Formatting this display purposes in an output.
 formatted_extra_car_discount_rate = FV.format_perc_no_decimal(
     XTRA_CAR_DISCOUNT_RATE)
 
 current_time = datetime.datetime.now()
 current_hour = current_time.hour
-time_of_day = FV.time_of_day(current_hour)
 
 # Main Program
 # This clears up the terminal.
@@ -42,7 +41,7 @@ while True:
     full_name = PF.get_customer_full_name()
 
     # Customer info inuputs function
-    customer_info = PF.get_customer_info(time_of_day, full_name)
+    customer_info = PF.get_customer_info(current_hour, full_name)
 
     # Policy information inputs function - takes in the full name for header personalization & the discount rate for informing the user about potential savings.
     insurance_info = PF.get_insurance_info(
@@ -105,8 +104,8 @@ while True:
     )
 
     # Formatting the dollar values en masse.
-    formatted_values = PF.format_dollar_values(down_payment, insurance_premium, hst_cost,
-                                               total_cost, extra_costs, total_insurance_premium_pretax)
+    formatted_values = PF.format_dollar_values(
+        down_payment, insurance_premium, hst_cost, total_cost, extra_costs, total_insurance_premium_pretax)
 
     # Desctucture the formatted values to be displayed on the receipt.
     down_payment, insurance_premium, hst_cost, total_cost, extra_costs, total_insurance_premium_pretax = formatted_values
@@ -178,9 +177,7 @@ while True:
     PF.saving_blinker()
 
     # Increment the policy number by 1.
-    print("PREVIOUS POLICY NUMBER: ", POLICY_NUM)
     POLICY_NUM += 1
-    print("NEW POLICY NUMBER: ", POLICY_NUM)
 
     # Save the updated policy number to the file
     f = open("Default.dat", "w")
