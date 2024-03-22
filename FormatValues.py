@@ -1,5 +1,6 @@
 # Importing required modules.
 import datetime
+import os
 
 
 def FDollar2(DollarValue):
@@ -146,17 +147,16 @@ def check_phone_num(phone_num):
     """
     if len(phone_num) != 10:
         return "Data Entry Error (Invalid phone number) - Character count issue. Please try again."
-    elif phone_num.isdigit() == False:
+    elif not phone_num.isdigit():
         return "Data Entry Error (Invalid phone number) - Phone number must only be numerical values. Please try again."
-    else:
-        return format_phone_num(phone_num)
+    return format_phone_num(phone_num)
 
 # Formatting & validatng dates to YYYY-MM-DD format.
 
 
 def format_date(date):
     """
-    Accepts a value that has already been validated through the check_date function and format it to YYYY-MM-DD.
+    Accepts a value that has already been validated through the check_date function and formats it to YYYY-MM-DD.
 
     Returns a formatted date.
     """
@@ -181,7 +181,7 @@ def check_date(date):
         try:
             year, month, day = map(int, date.split('-'))
             datetime.datetime(year, month, day)
-            return date
+            return format_date(date)
         except ValueError:
             return "Data Entry Error (Invalid date) - Date values are out of range."
 
@@ -190,12 +190,27 @@ def check_date(date):
 
 def validate_province(province):
     """
-    Accepts a value and checks if it is a valid province abbreviation.
+    Accepts a value and checks if it is a valid province abbreviation, by using a list of valid province abbreviations.
 
     Returns the province abbreviation if valid, otherwise returns None.
     """
+    PROVINCES = [
+        "AB",
+        "BC",
+        "MB",
+        "NB",
+        "NL",
+        "NS",
+        "NT",
+        "NU",
+        "ON",
+        "PE",
+        "QC",
+        "SK",
+        "YT",
+    ]
     province = province.upper()
-    if province not in ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"]:
+    if province not in PROVINCES:
         return None
     else:
         return province.upper()
@@ -205,7 +220,9 @@ def validate_province(province):
 
 def time_of_day(current_hour):
     """
-    Accepts a time in 24-hour format and returns the time of day as morning, afternoon, or evening.
+    Accepts a time in 24-hour format
+
+    Returns the time of day as morning, afternoon, or evening.
     """
     # Define the time ranges for morning, afternoon, and night
     # 6:00 AM to 11:59 AM
@@ -224,3 +241,36 @@ def time_of_day(current_hour):
         return "evening"
     else:
         return "night"
+
+# Formatting percentages with 0 decimal places.
+
+
+def format_perc_no_decimal(perc_value):
+    """
+    Accepts a value and formats it to a percentage with no decimal places.
+
+    Returns a formatted percentage with no decimal places.
+    """
+    return "{:.0%}".format(perc_value)
+
+# Formatting percentages with 1 decimal place.
+
+
+def format_perc_one_decimal(perc_value):
+    """
+    Accepts a value and formats it to a percentage with one decimal place.
+
+    Returns a formatted percentage with one decimal place.
+    """
+    return "{:.1%}".format(perc_value)
+
+# Formatting percentages with 2 decimal places.
+
+
+def format_perc_two_decimal(perc_value):
+    """
+    Accepts a value and formats it to a percentage with two decimal places.
+
+    Returns a formatted percentage with two decimal places.
+    """
+    return "{:.2%}".format(perc_value)
