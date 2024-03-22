@@ -26,22 +26,19 @@ HST_RATE = float(f.readline())
 MONTHLY_PRCSSING_FEE = float(f.readline())
 f.close()
 
-# Formatting this display purposes in an output.
+CURRENT_DATE = datetime.datetime.now()
+
+# Formatting this for display purposes in an output.
 formatted_extra_car_discount_rate = FV.format_perc_no_decimal(
     XTRA_CAR_DISCOUNT_RATE)
 
-current_time = datetime.datetime.now()
-current_hour = current_time.hour
-
-# Main Program
-# This clears up the terminal.
-PF.clear_terminal()
+# Main Program Loop
 while True:
     # User name inputs function.
     full_name = PF.get_customer_full_name()
 
     # Customer info inuputs function
-    customer_info = PF.get_customer_info(current_hour, full_name)
+    customer_info = PF.get_customer_info(full_name)
 
     # Policy information inputs function - takes in the full name for header personalization & the discount rate for informing the user about potential savings.
     insurance_info = PF.get_insurance_info(
@@ -134,9 +131,9 @@ while True:
     print("============================================")
     print()
     print(f"    Number of Cars Insured:            {num_cars_insured:>2d}")
-    print(f"    Extra Liability Coverage:         {extra_liability:<3s}")
-    print(f"    Glass Coverage:                   {glass_coverage:<3s}")
-    print(f"    Loaner Car Coverage:              {loaner_car:<3s}")
+    print(f"    Extra Liability Coverage:         {extra_liability:>3s}")
+    print(f"    Glass Coverage:                   {glass_coverage:>3s}")
+    print(f"    Loaner Car Coverage:              {loaner_car:>3s}")
     print()
     print(f"    Payment Method:              {payment_method:>8s}")
     # Display Down Payment if payment method is 'Down Pay'.
@@ -174,6 +171,38 @@ while True:
     print(f"      Premium Cost(Pre-tax):{total_insurance_premium_pretax:>10s}")
     print()
 
+    f = open("Policies.dat", "a")
+
+    # All values written to file must be a string.  If you have a numeric
+    # value, use the str() function to convert.
+    f.write("{}, ".format(str(POLICY_NUM)))
+    # This is the current system date
+    f.write("{}, ".format(str(CURRENT_DATE)))
+    f.write("{}, ".format(str(invoice_date)))
+    f.write("{}, ".format(str(full_name)))
+    f.write("{}, ".format(str(address)))
+    f.write("{}, ".format(str(city)))
+    f.write("{}, ".format(str(province)))
+    f.write("{}, ".format(str(postal_code)))
+    f.write("{}, ".format(str(phone_number)))
+    f.write("{}, ".format(str(num_cars_insured)))
+    f.write("{}, ".format(str(extra_liability)))
+    f.write("{}, ".format(str(glass_coverage)))
+    f.write("{}, ".format(str(loaner_car)))
+    f.write("{}, ".format(str(payment_method)))
+    if payment_method.upper() == "DOWN PAY":
+        f.write("{}, ".format(str(down_payment)))
+    f.write("{}, ".format(str(insurance_premium)))
+    f.write("{}, ".format(str(extra_costs)))
+    f.write("{}, ".format(str(total_insurance_premium_pretax)))
+    f.write("{}, ".format(str(hst_cost)))
+    f.write("{}, ".format(str(total_cost)))
+    f.write("{}, ".format(str(monthly_payment)))
+    f.write("{}, ".format(str(first_payment_date)))
+    f.write("{}\n".format(claims))
+
+    f.close()
+
     PF.saving_blinker()
 
     # Increment the policy number by 1.
@@ -182,6 +211,13 @@ while True:
     # Save the updated policy number to the file
     f = open("Default.dat", "w")
     f.write("{}\n".format(str(POLICY_NUM)))
+    f.write("{}\n".format(str(BASIC_PREM_COST)))
+    f.write("{}\n".format(str(XTRA_CAR_DISCOUNT_RATE)))
+    f.write("{}\n".format(str(XTRA_LIABILITY_COST)))
+    f.write("{}\n".format(str(GLASS_COVERAGE_COST)))
+    f.write("{}\n".format(str(LOANER_COST)))
+    f.write("{}\n".format(str(HST_RATE)))
+    f.write("{}\n".format(str(MONTHLY_PRCSSING_FEE)))
     f.close()
 
     # Housekeeping

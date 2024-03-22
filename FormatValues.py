@@ -168,7 +168,7 @@ def format_date(date):
 def check_date(date):
     """
     Accepts a value and checks if it is a valid date in terms of character count,
-    numerical characters, and valid date values.
+    numerical characters, and valid date values. Also checks if the date is not in the future.
 
     Returns a formatted date or an error message.
     """
@@ -179,10 +179,12 @@ def check_date(date):
     else:
         try:
             year, month, day = map(int, date.split('-'))
-            datetime.datetime(year, month, day)
+            if datetime.datetime(year, month, day) > datetime.datetime.now():
+                return "Data Entry Error (Invalid date) - Date cannot be in the future."
             return format_date(date)
         except ValueError:
             return "Data Entry Error (Invalid date) - Date values are out of range."
+
 
 # Validating province
 
