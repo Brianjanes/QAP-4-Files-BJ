@@ -5,9 +5,6 @@
 # Import the required libraries
 import datetime
 import FormatValues as FV
-import sys
-import time
-import string
 import programFunctions as PF
 
 # ANSII escape codes to colour text in the terminal.
@@ -17,76 +14,48 @@ RESET = "\033[0m"
 GREEN = "\033[32m"
 
 # Define program constants
-# Defining valid provinces.
 
+f = open("Default.dat", "r")
+POLICY_NUM = int(f.readline())
+BASIC_PREM_COST = float(f.readline())
+XTRA_CAR_DISCOUNT_RATE = float(f.readline())
+XTRA_LIABILITY_COST = float(f.readline())
+GLASS_COVERAGE_COST = float(f.readline())
+LOANER_COST = float(f.readline())
+HST_RATE = float(f.readline())
+MONTHLY_PRCSSING_FEE = float(f.readline())
+f.close()
 
-POLICY_NUM = 1944
-BASIC_PREM_COST = 869.00
-XTRA_CAR_DISCOUNT_RATE = 0.25
-XTRA_LIABILITY_COST = 130.00
-GLASS_COVERAGE_COST = 86.00
-LOANER_COST = 58.00
-HST_RATE = 0.15
-MONTHLY_PRCSSING_FEE = 39.99
+# Formatting this for the next function.
+formatted_extra_car_discount_rate = FV.format_perc_no_decimal(
+    XTRA_CAR_DISCOUNT_RATE)
 
 current_time = datetime.datetime.now()
 current_hour = current_time.hour
 time_of_day = FV.time_of_day(current_hour)
 
-# Define the allowed characters for the address, and city inputs.
-ALLOWED_CHARACTERS = (
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz .,'-1234567890"
-)
-
 # Main Program
 # This clears up the terminal.
 PF.clear_terminal()
 while True:
-    # User information inputs.
-    print()
-    print()
-    print("                 Welcome to One Stop Insurance Group!")
-    print("   Before we get started, we need to collect some infomation from you.")
-    print("=========================================================================")
-    print()
-    print()
-
-    # User name inputs.
+    # User name inputs function.
     full_name = PF.get_customer_full_name()
 
-    PF.processing_blinker()
+    # Customer info inuputs function
+    customer_info = PF.get_customer_info(time_of_day, full_name)
 
-    # Cleaning up the terminal for the user to move to address inputs.
-    PF.clear_terminal()
-
-    # Greeting the user with their previously entered name based on the time of day.
-    PF.print_greeting(time_of_day, full_name)
-
-    # Customer info inuputs.
-    customer_info = PF.get_customer_info()
-
-    PF.processing_blinker()
-
-    # Clearing the terminal before a new section of inputs.
-    PF.clear_terminal()
-
-    # Formatting this for the next function, for upselling!
-    formatted_extra_car_discount_rate = "{:.0f}%".format(
-        XTRA_CAR_DISCOUNT_RATE * 100)
-
-    # Policy information inputs.
+    # Policy information inputs function - takes in the full name for header personalization & the discount rate for informing the user about potential savings.
     insurance_info = PF.get_insurance_info(
         full_name, formatted_extra_car_discount_rate)
 
-    PF.processing_blinker()
-
-    # Destructure the information from the return of the function.
+    # Descructuring the information from the return of the functions we have called to use in processing calculations.
+    # Destructure the information from the return of the customer_info().
     address, city, province, postal_code, phone_number = customer_info
 
-    # Destructure the information from the return of the function.
+    # Destructure the information from the return of get_insurance_info().
     num_cars_insured, extra_liability, glass_coverage, loaner_car = insurance_info
 
-    # Processing for policy information.
+    # Processing calculations with the destructured values to get the total cost of the insurance policy.
     # Calculate insurance premium for the first automobile.
     insurance_premium = BASIC_PREM_COST
 
@@ -98,12 +67,12 @@ while True:
 
     # Calculate extra costs for additional options.
     extra_costs = 0
-    if extra_liability == "Y":
-        extra_costs += num_cars_insured * XTRA_LIABILITY_COST
-    if glass_coverage == "Y":
-        extra_costs += num_cars_insured * GLASS_COVERAGE_COST
-    if loaner_car == "Y":
-        extra_costs += num_cars_insured * LOANER_COST
+    if extra_liability == "Yes":
+        extra_costs += (num_cars_insured * XTRA_LIABILITY_COST)
+    if glass_coverage == "Yes":
+        extra_costs += (num_cars_insured * GLASS_COVERAGE_COST)
+    if loaner_car == "Yes":
+        extra_costs += (num_cars_insured * LOANER_COST)
 
     # Calculate total insurance premium.
     total_insurance_premium = insurance_premium + extra_costs
@@ -114,23 +83,15 @@ while True:
     # Calculate total cost.
     total_cost = total_insurance_premium + hst_cost
 
-    # Destructure the payment method tuple
-    payment_type, down_payment = PF.get_payment_method(total_cost)
+    # Payment method inputs.
+    payment_info = PF.get_payment_method(
+        full_name, total_cost, MONTHLY_PRCSSING_FEE)
 
-    # Processing for payment type, invoice date, and premium cost (pre-tax)
-    # Calculate monthly payment.
-    if payment_type.upper() == "FULL":
-        monthly_payment = total_cost / 8
-    elif payment_type.upper() == "MONTHLY":
-        monthly_payment = (total_cost + MONTHLY_PRCSSING_FEE) / 8
-    elif payment_type.upper() == "DOWN PAY":
-        monthly_payment = (total_cost - down_payment +
-                           MONTHLY_PRCSSING_FEE) / 8
+    # Descructuring the information from the return of the payment method function to use in processing calculations.
+    payment_method, down_payment, monthly_payment = payment_info
 
     # Calculate total insurance premium (pre-tax)
     total_insurance_premium_pretax = insurance_premium + extra_costs
-
-    PF.processing_blinker()
 
     # Claims information inputs.
     claims = PF.get_claims()
@@ -143,14 +104,12 @@ while True:
         .strftime("%Y-%m-%d")
     )
 
-    # Formatting the dollar values em masse.
+    # Formatting the dollar values en masse.
     formatted_values = PF.format_dollar_values(down_payment, insurance_premium, hst_cost,
-                                               total_cost, monthly_payment, extra_costs, total_insurance_premium_pretax)
+                                               total_cost, extra_costs, total_insurance_premium_pretax)
 
-    # Desctucture the formatted values.
-    down_payment, insurance_premium, hst_cost, total_cost, monthly_payment, extra_costs, total_insurance_premium_pretax = formatted_values
-
-    PF.receipt_blinker()
+    # Desctucture the formatted values to be displayed on the receipt.
+    down_payment, insurance_premium, hst_cost, total_cost, extra_costs, total_insurance_premium_pretax = formatted_values
 
     # Display receipt.
     print()
@@ -180,9 +139,9 @@ while True:
     print(f"    Glass Coverage:                   {glass_coverage:<3s}")
     print(f"    Loaner Car Coverage:              {loaner_car:<3s}")
     print()
-    print(f"    Payment Method:              {payment_type:>8s}")
+    print(f"    Payment Method:              {payment_method:>8s}")
     # Display Down Payment if payment method is 'Down Pay'.
-    if payment_type.upper() == "DOWN PAY":
+    if payment_method.upper() == "DOWN PAY":
         print(f"    Down Payment:              {down_payment:>10s}")
     print()
     print(f"    Insurance Premium:         {insurance_premium:>10s}")
@@ -203,6 +162,7 @@ while True:
     else:
         print(f"      Claim #   Claim Date      Amount")
         print(f"      --------------------------------")
+        print()
     for claim in claims:
         print(
             f"      {claim['claim_number']}     {claim['claim_date']}  {claim['claim_amount']:>10s}"
@@ -222,21 +182,9 @@ while True:
 
     # Housekeeping
     # Ask the user if they want to enter another customer
-    print()
-    while True:
-        repeat = input(
-            f"{RED}Do you want to enter another customer? (Y/N): {RESET}"
-        ).upper()
-        print()
-        if repeat == "Y":
-            PF.clear_terminal()
-            break
-        elif repeat == "N":
-            PF.clear_terminal()
-            print()
-            print(f"{GREEN}Thank you for using One Stop Insurance Group!{RESET}")
-            exit()
-        print()
-        print(
-            f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}"
-        )
+    PF.repeat_program()
+
+    # Save the updated policy number to the file
+    f = open("Default.dat", "w")
+    f.write("{}\n".format(str(POLICY_NUM)))
+    f.close()

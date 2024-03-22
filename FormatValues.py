@@ -1,12 +1,11 @@
 # Importing required modules.
 import datetime
-import os
 
 
 def FDollar2(DollarValue):
     # Function will accept a value and format it to $#,###.##.
 
-    DollarValueStr = "${:,.2f}".format(DollarValue)
+    DollarValueStr = "${:,.2f}".format(float(DollarValue))
 
     return DollarValueStr
 
@@ -14,7 +13,7 @@ def FDollar2(DollarValue):
 def FDollar0(DollarValue):
     # Function will accept a value and format it to $#,###.##.
 
-    DollarValueStr = "${:,.0f}".format(DollarValue)
+    DollarValueStr = "${:,.0f}".format(float(DollarValue))
 
     return DollarValueStr
 
@@ -132,8 +131,7 @@ def format_phone_num(phone_num):
 
     Returns a formatted phone number.
     """
-    formatted_phone_num = "(" + phone_num[0:3] + ") " + \
-        phone_num[3:6] + "-" + phone_num[6:10]
+    formatted_phone_num = f"({phone_num[0:3]}) {phone_num[3:6]}-{phone_num[6:10]}"
     return formatted_phone_num
 
 # Formatting & validating phone numbers
@@ -149,7 +147,8 @@ def check_phone_num(phone_num):
         return "Data Entry Error (Invalid phone number) - Character count issue. Please try again."
     elif not phone_num.isdigit():
         return "Data Entry Error (Invalid phone number) - Phone number must only be numerical values. Please try again."
-    return format_phone_num(phone_num)
+    phone_num = format_phone_num(phone_num)
+    return phone_num
 
 # Formatting & validatng dates to YYYY-MM-DD format.
 

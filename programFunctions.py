@@ -51,7 +51,7 @@ def saving_blinker():
         sys.stdout.write("\033[2K\r")
         time.sleep(0.3)
     print()
-    print(GREEN + "      Policy data - successfully saved", end="\r" + RESET)
+    print(f"{GREEN}      Policy data - successfully saved{RESET}", end="\r")
     print()
 
 
@@ -76,6 +76,14 @@ def get_customer_full_name():
     Returns the customer's full name.
     """
     # First name input - strip the strong and check for only alphabetic characters.
+    # User information inputs.
+    print()
+    print()
+    print("                 Welcome to One Stop Insurance Group!")
+    print("   Before we get started, we need to collect some infomation from you.")
+    print("=========================================================================")
+    print()
+    print()
     while True:
         first_name = input("Enter the customer's first name: ").strip()
         if first_name.isalpha():
@@ -93,7 +101,9 @@ def get_customer_full_name():
         print(
             f"{RED}Data Entry Error - Last name must contain only alphabetic characters. Please try again.{RESET}"
         )
-
+    # Blinking message to simulate processing, followed by clearing the terminal to increase readability.
+    processing_blinker()
+    clear_terminal()
     # Concatenating and formatting the customer's full name for return.
     return first_name.title() + " " + last_name.title()
 
@@ -123,11 +133,12 @@ def time_of_day(current_hour):
         return "night"
 
 
-def print_greeting(current_hour, full_name):
+def get_customer_info(current_hour, full_name):
     """
-    Accepts the time of day and the customer's full name.
-    """
+    Function displays a personalized greeting to the user, calls for them to input street address, city, province, postal code, and phone number.
 
+    Returns the customer's address, city, province, postal code, and phone number.
+    """
     time = time_of_day(current_hour)
     print()
     print()
@@ -137,14 +148,6 @@ def print_greeting(current_hour, full_name):
     print("==============================================================")
     print()
     print()
-
-
-def get_customer_info():
-    """
-    Function calls for user input of address, city, province, postal code, and phone number.
-
-    Returns the customer's address, city, province, postal code, and phone number.
-    """
     # User address input.
     while True:
         address = input("Enter the customer's address: ").title()
@@ -197,19 +200,17 @@ def get_customer_info():
         phone_number = input(
             "Enter the customer's phone number (##########): ")
         # Check if the phone number is valid length, and all digits, return an error message if it's not & return the formatted phone number if it is.
-        check_phone_num = FV.check_phone_num(phone_number)
-        if len(check_phone_num) != 14:
+        validated_phone_num = FV.check_phone_num(phone_number)
+        if len(validated_phone_num) != 14:
             print()
-            print(f"{RED}{check_phone_num}{RESET}")
+            print(f"{RED}{validated_phone_num}{RESET}")
             continue
-        elif len(check_phone_num) == 14:
-            print()
-            print(
-                f"{GREEN}Phone number successfully validated. {RESET}")
-            print()
-            phone_number = check_phone_num
+        phone_number = validated_phone_num
         break
-
+    # Blinking message to simulate processing, followed by clearing the terminal to increase readability.
+    processing_blinker()
+    clear_terminal()
+    # Return the validated and formatted address, city, province, postal code, and phone number.
     return address, city, province, postal_code, phone_number
 
 
@@ -358,18 +359,28 @@ def get_insurance_info(full_name, discount_rate):
             print()
         break
 
+    # Blinking message to simulate processing, followed by clearing the terminal to increase readability.
+    processing_blinker()
+    clear_terminal()
     return num_cars_insured, extra_liability_display, glass_coverage_display, loaner_car_display
 
 
-def get_payment_method(total_cost):
+def get_payment_method(full_name, total_cost, processing_fee):
     """
-    Accepts the total cost of the policy to validate against the potential downpayment amount.
+    Accepts the total cost of the policy to validate against the potential down payment amount.
 
     Returns the payment method and if necessary the down payment amount.
     """
     VALID_PAYMENT_METHODS = ["FULL", "MONTHLY", "DOWN PAY"]
     down_payment_amt = 0
 
+    print()
+    print()
+    print(f"                 Almost there {full_name}!                 ")
+    print("             Let's get your Payment information.             ")
+    print("=============================================================")
+    print()
+    print()
     while True:
         payment_method = input(
             "Enter the payment method (Full, Monthly, or Down Pay): ").upper()
@@ -385,22 +396,37 @@ def get_payment_method(total_cost):
                     if down_payment_amt <= 0:
                         print(
                             f"{RED}Data Entry Error - Down payment cannot be less than or equal to 0. Please try again.{RESET}")
-                        break
                     elif down_payment_amt > total_cost:
                         print(
                             f"{RED}Data Entry Error - Down payment cannot be greater than the total cost. Please try again.{RESET}")
+                    else:
+                        print(
+                            f"{GREEN}You have chosen our Down Payment option. {RESET}")
                         break
-                    print(
-                        f"{GREEN}You have chosen our Down Payment option. {RESET}")
-                    down_payment_amt += down_payment_amt
-                    return payment_method.title(), down_payment_amt
                 except ValueError:
                     print(
                         f"{RED}Data Entry Error - Invalid input. Please enter a numerical value.{RESET}")
         elif payment_method.upper() == "FULL" or payment_method.upper() == "MONTHLY":
             print(
                 f"{GREEN}You have chosen our {payment_method.title()} payment option. {RESET}")
-            return payment_method.title(), down_payment_amt
+
+        # Calculate monthly payment.
+        if payment_method.upper() == "FULL":
+            monthly_payment = total_cost / 8
+        elif payment_method.upper() == "MONTHLY":
+            monthly_payment = (total_cost + processing_fee) / 8
+        elif payment_method == "DOWN PAY":
+            monthly_payment = (total_cost - down_payment_amt +
+                               processing_fee) / 8
+
+        # Format the monthly payment as a dollar amount.
+        monthly_payment = FV.FDollar2(monthly_payment)
+        # Formatting payment method as title case.
+        payment_method = payment_method.title()
+        # Blinking message to simulate processing, followed by clearing the terminal to increase readability.
+        processing_blinker()
+        clear_terminal()
+        return payment_method, down_payment_amt, monthly_payment
 
 
 def get_claims():
@@ -411,14 +437,14 @@ def get_claims():
     """
     claims = []
 
-    clear_terminal()
     print()
     print()
     print("                  Last Section - We promise!                 ")
     print("           Let's finish up with claim information.           ")
     print("=============================================================")
+    print()
+    print()
     while True:
-
         while True:
             print()
             claim_number = input(
@@ -435,6 +461,7 @@ def get_claims():
                     f"{RED}Data Entry Error - Invalid claim number. Please enter numerical value.{RESET}")
 
         while True:
+            print()
             claim_date = input("Enter the claim date (YYYY-MM-DD): ")
             validated_date = FV.check_date(claim_date)
             if not validated_date.startswith("Data Entry Error"):
@@ -443,6 +470,7 @@ def get_claims():
 
         while True:
             try:
+                print()
                 claim_amount = float(input("Enter the claim amount: "))
                 if claim_amount <= 0:
                     print(
@@ -462,13 +490,17 @@ def get_claims():
         })
 
         print()
-        repeat = input("Do you want to enter another claim? (Y/N): ")
+        repeat = input(
+            f"{GREEN}Do you want to enter another claim? (Y/N): {RESET}")
         if repeat.upper() == "N":
             break  # Exit the loop after no more claims are to be entered.
         elif repeat.upper() != "Y":
             print(
                 f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}")
 
+    # Blinking message to simulate processing, followed by clearing the terminal to increase readability.
+    receipt_blinker()
+    clear_terminal()
     return claims
 
 
@@ -486,3 +518,30 @@ def format_dollar_values(*args):
     for value in args:
         formatted_values.append(FV.FDollar2(value))
     return formatted_values
+
+
+def repeat_program():
+    """
+    Function to ask the user if they want to enter another customer. Accepts "Y" or "N" input.
+    If Y, clears the terminal and continues the program.
+    If N, clears the terminal and exits the program.
+    If invalid input, prompts the user to enter "Y" or "N" again.
+    """
+    print()
+    while True:
+        repeat = input(
+            f"{RED}Do you want to enter another customer? (Y/N): {RESET}"
+        ).upper()
+        print()
+        if repeat == "Y":
+            clear_terminal()
+            break
+        elif repeat == "N":
+            clear_terminal()
+            print()
+            print(f"{GREEN}Thank you for using One Stop Insurance Group!{RESET}")
+            exit()
+        print()
+        print(
+            f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}"
+        )
