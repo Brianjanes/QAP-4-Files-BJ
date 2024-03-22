@@ -178,13 +178,15 @@ while True:
     PF.saving_blinker()
 
     # Increment the policy number by 1.
+    print("PREVIOUS POLICY NUMBER: ", POLICY_NUM)
     POLICY_NUM += 1
-
-    # Housekeeping
-    # Ask the user if they want to enter another customer
-    PF.repeat_program()
+    print("NEW POLICY NUMBER: ", POLICY_NUM)
 
     # Save the updated policy number to the file
     f = open("Default.dat", "w")
     f.write("{}\n".format(str(POLICY_NUM)))
     f.close()
+
+    # Housekeeping
+    # Ask the user if they want to enter another customer
+    PF.repeat_program()

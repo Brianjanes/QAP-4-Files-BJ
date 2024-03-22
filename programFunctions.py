@@ -6,10 +6,6 @@ import string
 import time
 import sys
 
-current_time = datetime.datetime.now()
-current_hour = current_time.hour
-time_of_day = FV.time_of_day(current_hour)
-
 # Define allowed characters for user inputs.
 ALLOWED_CHARACTERS = (
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz .,'-1234567890"
@@ -129,8 +125,7 @@ def time_of_day(current_hour):
         return "afternoon"
     elif current_hour in night_range:
         return "evening"
-    else:
-        return "night"
+    return "night"
 
 
 def get_customer_info(current_hour, full_name):
@@ -142,10 +137,10 @@ def get_customer_info(current_hour, full_name):
     time = time_of_day(current_hour)
     print()
     print()
-    print(f"               Good {time}, {full_name}!")
-    print("   We are excited to offer you a new insurance policy today.")
-    print("         Let's move on to your address information.")
-    print("==============================================================")
+    print(f"                   Good {time}, {full_name}!")
+    print("        We are excited to offer you a new insurance policy today.")
+    print("               Let's move on to your address information.                ")
+    print("=========================================================================")
     print()
     print()
     # User address input.
