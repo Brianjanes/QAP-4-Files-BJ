@@ -8,6 +8,7 @@ import datetime
 
 current_time = datetime.datetime.now()
 current_hour = current_time.hour
+current_date = current_time.date()
 
 # Define allowed characters for user inputs.
 ALLOWED_CHARACTERS = (
@@ -87,6 +88,7 @@ def get_customer_full_name():
         first_name = input("  Enter the customer's first name: ").strip()
         if first_name.isalpha():
             break
+        print()
         print(
             f"{RED}Data Entry Error - First name must contain only alphabetic characters. Please try again.{RESET}"
         )
@@ -97,6 +99,7 @@ def get_customer_full_name():
         last_name = input("  Enter the customer's last name:  ").strip()
         if last_name.isalpha():
             break
+        print()
         print(
             f"{RED}Data Entry Error - Last name must contain only alphabetic characters. Please try again.{RESET}"
         )
@@ -397,6 +400,7 @@ def get_payment_method(full_name, total_cost, processing_fee):
         payment_method = input(
             "  Enter the payment method (Full, Monthly, or Down Pay): ").upper()
         if payment_method not in VALID_PAYMENT_METHODS:
+            print()
             print(
                 f"{RED}Data Entry Error - Invalid payment method. Please enter a valid payment method.{RESET}")
             continue
@@ -408,10 +412,12 @@ def get_payment_method(full_name, total_cost, processing_fee):
                     down_payment_amt = float(
                         input(f"{GREEN}  Enter the amount of the down payment: {RESET}"))
                     if down_payment_amt <= 0:
+                        print()
                         print(
                             f"{RED}Data Entry Error - Down payment cannot be less than or equal to 0. Please try again.{RESET}")
                         continue
                     elif down_payment_amt > total_cost:
+                        print()
                         print(
                             f"{RED}Data Entry Error - Down payment cannot be greater than the total cost. Please try again.{RESET}")
                         continue
@@ -420,6 +426,7 @@ def get_payment_method(full_name, total_cost, processing_fee):
                         f"{GREEN}You have chosen our Down Payment option. {RESET}")
                     break
                 except ValueError:
+                    print()
                     print(
                         f"{RED}Data Entry Error - Invalid input. Please enter a numerical value.{RESET}")
                     continue
@@ -487,7 +494,6 @@ def get_claims():
             print()
             print(
                 f"{RED}Data Entry Error - Invalid claim number. Please enter 5 numerical digits.{RESET}")
-
         if claim_number.upper() == "DONE":
             break
 
@@ -496,9 +502,17 @@ def get_claims():
             claim_date = input("  Enter the claim date (YYYY-MM-DD): ")
             validated_date = FV.check_date(claim_date)
             if not validated_date.startswith("Data Entry Error"):
+                # Check if the claim date is within the last 10 years
+                claim_date_age_limit = datetime.datetime.strptime(
+                    claim_date, "%Y-%m-%d").date()
+            elif claim_date_age_limit >= current_date - datetime.timedelta(days=365 * 10):
+                print()
+                print(
+                    f"{RED}Data Entry Error - Claim date cannot be more than 10 years ago. Please try again.{RESET}")
                 break
-            print()
-            print(f"{RED}{validated_date}{RESET}")
+            else:
+                print()
+                print(f"{RED}{validated_date}{RESET}")
 
         while True:
             try:
@@ -510,6 +524,7 @@ def get_claims():
                 print(
                     f"{RED}Data Entry Error - Claim amount must be greater than 0. Please try again.{RESET}")
             except ValueError:
+                print()
                 print(
                     f"{RED}Data Entry Error - Invalid input. Please enter a valid numerical value.{RESET}")
 
