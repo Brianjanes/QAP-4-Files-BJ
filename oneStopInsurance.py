@@ -28,10 +28,6 @@ f.close()
 
 CURRENT_DATE = datetime.datetime.now()
 
-# Formatting this for display purposes in an output.
-formatted_extra_car_discount_rate = FV.format_perc_no_decimal(
-    XTRA_CAR_DISCOUNT_RATE)
-
 # Main Program Loop
 while True:
     # User name inputs function.
@@ -41,8 +37,7 @@ while True:
     customer_info = PF.get_customer_info(full_name)
 
     # Policy information inputs function - takes in the full name for header personalization & the discount rate for informing the user about potential savings.
-    insurance_info = PF.get_insurance_info(
-        full_name, formatted_extra_car_discount_rate)
+    insurance_info = PF.get_insurance_info(full_name)
 
     # Descructuring the information from the return of the functions we have called to use in processing calculations.
     # Destructure the information from the return of the customer_info().
@@ -144,7 +139,8 @@ while True:
     print(f"    Extra Costs Total:         {extra_costs:>10s}")
     print(f"    HST:                       {hst_cost:>10s}")
     print(f"    Total Cost:                {total_cost:>10s}")
-    print(f"    Monthly Payment:           {monthly_payment:>10s}")
+    if payment_method.upper() != "FULL":
+        print(f"    Monthly Payment:           {monthly_payment:>10s}")
     print()
     print(f"    First Payment Date:        {first_payment_date:>10s}")
     print()
@@ -165,10 +161,6 @@ while True:
         )
         print()
     print(f"      --------------------------------")
-
-    # Display total insurance premium (pre-tax) and save policy data message
-    print()
-    print(f"      Premium Cost(Pre-tax):{total_insurance_premium_pretax:>10s}")
     print()
 
     f = open("Policies.dat", "a")

@@ -34,20 +34,21 @@ def processing_blinker():
     A short blinking statement to pause inbetween inputs to create a better flow for the user.
     """
     print()
-    print()
-    for _ in range(2):  # Change to control number of 'blinks'
+    # Change to control number of 'blinks'
+    for _ in range(2):
         print(f"{GREEN}    Processing Policy Information...{RESET}", end="\r")
-        time.sleep(0.3)  # To create the blinking effect
-        # Clears the entire line and carriage returns
+        # Pause for 0.3 seconds
+        time.sleep(0.3)
         sys.stdout.write("\033[2K\r")
         time.sleep(0.3)
 
 
 def saving_blinker():
-    for _ in range(5):  # Change to control number of 'blinks'
+    # Change to control number of 'blinks'
+    for _ in range(5):
         print("          Saving claim data...", end="\r")
-        time.sleep(0.3)  # To create the blinking effect
-        # Clears the entire line and carriage returns
+        # Pause for 0.3 seconds
+        time.sleep(0.3)
         sys.stdout.write("\033[2K\r")
         time.sleep(0.3)
     print()
@@ -58,8 +59,10 @@ def saving_blinker():
 def receipt_blinker():
     print()
     print()
+    # Change to control number of 'blinks'
     for _ in range(4):
         print(f"{GREEN}        PROCESSING YOUR RECEIPT{RESET}", end="\r")
+        # Pause for 0.3 seconds
         time.sleep(0.3)
         # Flush the output buffer to make sure the message is displayed immediately
         sys.stdout.flush()
@@ -67,47 +70,6 @@ def receipt_blinker():
         # Clears the entire line and carriage returns
         sys.stdout.write("\033[2K\r")
         time.sleep(0.3)
-
-
-def get_customer_full_name():
-    """
-    Function calls for user input of first and last name.
-
-    Returns the customer's full name.
-    """
-    # First name input - strip the strong and check for only alphabetic characters.
-    # User information inputs.
-    print()
-    print()
-    print("                 Welcome to One Stop Insurance Group!")
-    print("   Before we get started, we need to collect some infomation from you.")
-    print("=========================================================================")
-    print()
-    print()
-    while True:
-        first_name = input("  Enter the customer's first name: ").strip()
-        if first_name.isalpha():
-            break
-        print()
-        print(
-            f"{RED}Data Entry Error - First name must contain only alphabetic characters. Please try again.{RESET}"
-        )
-
-    # Last name input - strip the strong and check for only alphabetic characters.
-    while True:
-        print()
-        last_name = input("  Enter the customer's last name:  ").strip()
-        if last_name.isalpha():
-            break
-        print()
-        print(
-            f"{RED}Data Entry Error - Last name must contain only alphabetic characters. Please try again.{RESET}"
-        )
-    # Blinking message to simulate processing, followed by clearing the terminal to increase readability.
-    processing_blinker()
-    clear_terminal()
-    # Concatenating and formatting the customer's full name for return.
-    return first_name.title() + " " + last_name.title()
 
 
 def time_of_day(current_hour):
@@ -134,6 +96,50 @@ def time_of_day(current_hour):
     return "night"
 
 
+def get_customer_full_name():
+    """
+    Function calls for user input of first and last name.
+
+    Returns the customer's full name.
+    """
+    # First name input - strip the strong and check for only alphabetic characters.
+    # User information inputs.
+    print()
+    print()
+    print("                 Welcome to One Stop Insurance Group!")
+    print("   Before we get started, we need to collect some infomation from you.")
+    print("=========================================================================")
+    print()
+    print()
+    while True:
+        first_name = input("  Enter the customer's first name: ").strip()
+        if not first_name.isalpha():
+            print()
+            print(
+                f"{RED}Data Entry Error - First name must contain only alphabetic characters. Please try again.{RESET}")
+            print()
+            continue
+        break
+
+    # Last name input - strip the strong and check for only alphabetic characters.
+    while True:
+        print()
+        last_name = input("  Enter the customer's last name:  ").strip()
+        if not last_name.isalpha():
+            print()
+            print(
+                f"{RED}Data Entry Error - Last name must contain only alphabetic characters. Please try again.{RESET}"
+            )
+            continue
+
+        break
+    # Blinking message to simulate processing, followed by clearing the terminal to increase readability.
+    processing_blinker()
+    clear_terminal()
+    # Concatenating and formatting the customer's full name for return.
+    return first_name.title() + " " + last_name.title()
+
+
 def get_customer_info(full_name):
     """
     Function displays a personalized greeting to the user, calls for them to input street address, city, province, postal code, and phone number.
@@ -152,22 +158,39 @@ def get_customer_info(full_name):
     # User address input.
     while True:
         address = input("  Enter the customer's address: ").title()
-        if all(char in ALLOWED_CHARACTERS for char in address):
-            break
-        print()
-        print(f"{RED}Data Entry Error - Invalid address. Please try again.{RESET}")
+        # Using isspace() to check if the string is only whitespace.
+        if address.isspace() or address == "":
+            print()
+            print(
+                f"{RED}Data Entry Error - Address cannot be blank. Please try again.{RESET}"
+            )
+            print()
+            continue
+        elif not all(char in ALLOWED_CHARACTERS for char in address):
+            print()
+            print(
+                f"{RED}Data Entry Error - Invalid address. Please try again.{RESET}")
+            print()
+            continue
+        break
 
     # User city input.
     while True:
         print()
         city = string.capwords(input("  Enter the customer's city: "))
-        if not all(char in ALLOWED_CHARACTERS for char in city):
+        if city.isspace() or city == "":
+            print()
+            print(
+                f"{RED}Data Entry Error - City cannot be blank. Please try again.{RESET}"
+            )
+            continue
+        elif not all(char in ALLOWED_CHARACTERS for char in city):
             print()
             print(
                 f"{RED}Data Entry Error - Invalid character used. Please try again.{RESET}"
             )
-        else:
-            break
+            continue
+        break
 
     # Province input.
     while True:
@@ -175,20 +198,32 @@ def get_customer_info(full_name):
         province = input(
             "  Enter the customer's province (2 letter abbreviation): ")
         validated_province = FV.validate_province(province)
-        if validated_province:
-            province = validated_province
-            break
-        print()
-        print(
-            f"{RED}Data Entry Error - Please enter a valid province abbreviation.{RESET}"
-        )
+        if province.isspace() or province == "":
+            print()
+            print(
+                f"{RED}Data Entry Error - Province cannot be blank. Please try again.{RESET}"
+            )
+            continue
+        if not validated_province:
+            print()
+            print(
+                f"{RED}Data Entry Error - Please enter a valid province abbreviation.{RESET}"
+            )
+            continue
+        province = validated_province
+        break
 
     # Postal code input - Explained in FormatValues.py
     while True:
         print()
         postal_code = input("  Enter the customer's postal code (X#X#X#): ")
         check_post_code = FV.check_postal_code(postal_code)
-        if check_post_code.startswith("Data Entry Error"):
+        if postal_code.isspace() or postal_code == "":
+            print()
+            print(
+                f"{RED}Data Entry Error - Postal code cannot be blank. Please try again.{RESET}")
+            continue
+        elif check_post_code.startswith("Data Entry Error"):
             print()
             print(f"{RED}{check_post_code}{RESET}")
             continue
@@ -215,7 +250,7 @@ def get_customer_info(full_name):
     return address, city, province, postal_code, phone_number
 
 
-def get_insurance_info(full_name, discount_rate):
+def get_insurance_info(full_name):
     """
     Function calls for user input of the number of cars to be insured, 
 
@@ -233,142 +268,104 @@ def get_insurance_info(full_name, discount_rate):
         try:
             num_cars_insured = int(
                 input("  Enter the number of cars to be insured: "))
-            # Check if the number of cars insured is less than 1, return an error message if it is.
-            if num_cars_insured < 1:
+            if num_cars_insured < 1 or num_cars_insured > 9:
                 print()
                 print(
-                    f"{RED}Data Entry Error - Number of cars insured cannot be less than 1. Please try again.{RESET}"
-                )
-                continue
-            elif num_cars_insured > 1:
+                    f"{RED}Data Entry Error - Number of cars insured cannot be less than 1 or greater than 9. Please try again.{RESET}")
                 print()
-                print(
-                    f"{GREEN}You have entered {num_cars_insured} cars to be insured. This qualifies you for a {discount_rate} discount!{RESET}"
-                )
-                print()
-                break
+                continue  # Continue the loop if input is less than 1
             elif num_cars_insured == 1:
                 print()
                 print(
-                    f"{RED}You have entered {num_cars_insured} vehicle to be insured."
-                )
+                    f"{RED}You have entered {num_cars_insured} vehicle to be insured.{RESET}")
                 print()
                 add_another_vehicle = input(
-                    f"  Would you like to add another vehicle to qualify for a {discount_rate} discount? (Y/N): "
-                ).upper()
-                print()
+                    "  Would you like to add another vehicle? (Y/N): ").upper()
                 if add_another_vehicle == "Y":
-                    print()
-                    print(
-                        f"{GREEN}You have chosen to add another vehicle. This qualifies you for a {discount_rate} discount!{RESET}"
-                    )
-                    print()
                     num_cars_insured += 1
-                    break
                 elif add_another_vehicle == "N":
                     print()
                     print(
-                        f"{GREEN}You have chosen to insure only {num_cars_insured} car.\nIf you wish to review your policy in the future,\nFeel free to contact us at One Stop Insurance Group.{RESET}"
-                    )
+                        f"{GREEN}You have chosen to insure only {num_cars_insured} car.")
                     print()
-                    print("One Stop Insurance Group")
-                    print("Customer Service: 1-800-555-5555")
+                    print(
+                        f"If you wish to review your policy in the future, feel free to contact us at One Stop Insurance Group.")
                     print()
-                    break
-                else:
+                    print(f"    One Stop Insurance Group")
+                    print(f"    Customer Service: 1-800-555-5555{RESET}")
                     print()
-                    print(f"{RED}Invalid input. Please enter Y or N.{RESET}")
-                    continue
-        except ValueError:
+                    break  # Break out of the loop if 'N' is entered
+                print(f"{RED}Invalid input. Please enter Y or N.{RESET}")
             print()
             print(
-                f"{RED}Data Entry Error - Number of cars insured must be a valid integer. Please try again.{RESET}"
-            )
+                f"{GREEN}You have entered {num_cars_insured} cars to be insured.{RESET}")
+            print()
+            break
+        except ValueError:
+            print(
+                f"{RED}Data Entry Error - Number of cars insured must be a valid integer. Please try again.{RESET}")
 
-    # Extra liability coverage input
     while True:
         extra_liability = input(
-            "  Would you like to add extra liability coverage? (Y/N): "
-        ).upper()
-        if extra_liability != "Y" and extra_liability != "N":
+            "  Would you like to add extra liability coverage? (Y/N): ").upper()
+        if extra_liability not in ['Y', 'N']:
             print()
-            print(
-                f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}"
-            )
+            print(f"{RED}Invalid input. Please enter 'Y' or 'N'.{RESET}")
             continue
-        elif extra_liability == "Y":
-            # Display 'Yes' if the user enters 'Y'.
-            extra_liability_display = "Yes"
-            # Adding a coloured confirmation message to the user.
+
+        extra_liability_display = "Yes" if extra_liability == "Y" else "No"
+        if extra_liability == "Yes" or extra_liability == "Y":
             print()
             print(
-                f"{GREEN}Extra liability coverage up to $1,000,000 has been added to your policy.{RESET}"
-            )
+                f"{GREEN}Extra liability coverage: {extra_liability_display}{RESET}")
             print()
-        elif extra_liability == "N":
-            # Display 'No' if the user enters 'N'.
-            extra_liability_display = "No"
-            # Adding a coloured confirmation message to the user.
+        elif extra_liability == "No" or extra_liability == "N":
             print()
             print(
-                f"{RED}Extra liability coverage has not been added to your policy.{RESET}")
+                f"{RED}Extra liability coverage: {extra_liability_display}{RESET}")
             print()
         break
 
-    # Glass coverage input
     while True:
         glass_coverage = input(
-            "  Would you like to add glass coverage? (Y/N):           "
-        ).upper()
-        if glass_coverage != "Y" and glass_coverage != "N":
+            "  Would you like to add glass coverage? (Y/N): ").upper()
+        if glass_coverage not in ['Y', 'N']:
             print()
-            print(
-                f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}"
-            )
+            print(f"{RED}Invalid input. Please enter 'Y' or 'N'.{RESET}")
+            print()
             continue
-        elif glass_coverage == "Y":
-            # Display 'Yes' if the user enters 'Y'.
-            glass_coverage_display = "Yes"
-            # Adding a confirmation message to the user.
+
+        glass_coverage_display = "Yes" if glass_coverage == "Y" else "No"
+        if glass_coverage == "Yes" or glass_coverage == "Y":
             print()
             print(
-                f"{GREEN}Glass coverage has been added to your policy.{RESET}"
-            )
+                f"{GREEN}Glass coverage: {glass_coverage_display}{RESET}")
             print()
-        elif glass_coverage == "N":
-            # Display 'No' if the user enters 'N'.
-            glass_coverage_display = "No"
-            # Adding a confirmation message to the user.
+        elif glass_coverage == "No" or glass_coverage == "N":
             print()
-            print(f"{RED}Glass coverage had not been added to your policy.{RESET}")
+            print(
+                f"{RED}Glass coverage: {glass_coverage_display}{RESET}")
             print()
         break
 
-    # Loaner car coverage input
     while True:
         loaner_car = input(
-            "  Would you like to add loaner car coverage? (Y/N):      "
-        ).upper()
-        if loaner_car != "Y" and loaner_car != "N":
+            "  Would you like to add loaner car coverage? (Y/N): ").upper()
+        if loaner_car not in ['Y', 'N']:
+            print()
+            print(f"{RED}Invalid input. Please enter 'Y' or 'N'.{RESET}")
+            print()
+
+        loaner_car_display = "Yes" if loaner_car == "Y" else "No"
+        if loaner_car == "Yes" or loaner_car == "Y":
             print()
             print(
-                f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}"
-            )
-            continue
-        elif loaner_car == "Y":
-            # Display 'Yes' if the user enters 'Y'.
-            loaner_car_display = "Yes"
-            # Adding a confirmation message to the user.
+                f"{GREEN}Loaner car coverage: {loaner_car_display}{RESET}")
             print()
-            print(f"{GREEN}Loaner car coverage has been added to your policy.{RESET}")
-            print()
-        elif loaner_car == "N":
-            # Display 'No' if the user enters 'N'.
-            loaner_car_display = "No"
-            # Adding a confirmation message to the user.
+        elif loaner_car == "No" or loaner_car == "N":
             print()
             print(
-                f"{RED}Loaner car coverage has not been added to your policy.{RESET}")
+                f"{RED}Loaner car coverage: {loaner_car_display}{RESET}")
             print()
         break
 
@@ -390,7 +387,7 @@ def get_payment_method(full_name, total_cost, processing_fee):
     print()
     print()
     print(f"                       Almost there {full_name}!")
-    print("                   Let's get your Payment information.")
+    print("                   Let's get your payment information.")
     print("=========================================================================")
     print()
     print()
@@ -403,9 +400,12 @@ def get_payment_method(full_name, total_cost, processing_fee):
             print()
             print(
                 f"{RED}Data Entry Error - Invalid payment method. Please enter a valid payment method.{RESET}")
+            print()
             continue
 
         elif payment_method == "DOWN PAY" or payment_method == "D":
+            print()
+            print(f"{GREEN}You have chosen the Down Payment option. {RESET}")
             while True:
                 try:
                     print()
@@ -421,42 +421,34 @@ def get_payment_method(full_name, total_cost, processing_fee):
                         print(
                             f"{RED}Data Entry Error - Down payment cannot be greater than the total cost. Please try again.{RESET}")
                         continue
-                    print()
-                    print(
-                        f"{GREEN}You have chosen our Down Payment option. {RESET}")
                     break
                 except ValueError:
                     print()
                     print(
-                        f"{RED}Data Entry Error - Invalid input. Please enter a numerical value.{RESET}")
-                    continue
+                        f"{RED}Data Entry Error - Invalid input. {ValueError}.{RESET}")
 
-        elif payment_method == "FULL" or payment_method == "MONTHLY":
-            # Formatting payment method as title case.
-            payment_method = payment_method.title()
+        elif payment_method in {"FULL", "F", "MONTHLY", "M"}:
+            payment_method = "Full" if payment_method in {
+                "FULL", "F"} else "Monthly"
             print()
             print(
-                f"{GREEN}You have chosen our {payment_method} payment option. {RESET}")
-        elif payment_method == "F":
-            payment_method = "Full"
-            print()
-            print(
-                f"{GREEN}You have chosen our {payment_method} payment option. {RESET}")
-        elif payment_method == "M":
-            payment_method = "Monthly"
-            print()
-            print(
-                f"{GREEN}You have chosen our {payment_method} payment option. {RESET}")
+                f"{GREEN}You have chosen the {payment_method} payment option. {RESET}")
 
         monthly_payment = 0
         # Calculate monthly payment.
-        if payment_method == "Full" or payment_method == "F":
-            monthly_payment = total_cost / 8
-        elif payment_method == "Monthly" or payment_method == "M":
+        if payment_method == "Monthly" or payment_method == "M":
             monthly_payment = (total_cost + processing_fee) / 8
         elif payment_method == "Down Pay" or payment_method == "D":
             monthly_payment = (
                 total_cost - down_payment_amt + processing_fee) / 8
+
+        # Before returning, replace short forms with full names (I thought I was doing this but it doesn't seem to be working as exected).
+        if payment_method == "F":
+            payment_method = "Full"
+        elif payment_method == "M":
+            payment_method = "Monthly"
+        elif payment_method == "D":
+            payment_method = "Down Pay"
 
         # Format the monthly payment as a dollar amount.
         monthly_payment = FV.FDollar2(monthly_payment)
@@ -481,48 +473,77 @@ def get_claims():
     print("                 Let's finish up with claim information.")
     print("=========================================================================")
     print()
+    print()
 
     while True:
         while True:
-            print()
             claim_number = input(
                 "  Enter the claim number (#####) (type 'DONE' to finish): ")
-            if claim_number.upper() == "DONE":
+            if claim_number.isspace() or claim_number == "":
+                print()
+                print(
+                    f"{RED}Data Entry Error - Claim number cannot be empty. Please try again.{RESET}")
+                print()
+                continue
+            elif claim_number.upper() == "DONE":
                 break
             elif claim_number.isdigit() and len(claim_number) == 5:
                 break
             print()
             print(
                 f"{RED}Data Entry Error - Invalid claim number. Please enter 5 numerical digits.{RESET}")
+            print()
         if claim_number.upper() == "DONE":
             break
 
         while True:
             print()
-            claim_date = input("  Enter the claim date (YYYY-MM-DD): ")
+            # Remove leading and trailing spaces
+            claim_date = input("  Enter the claim date (YYYY-MM-DD): ").strip()
             validated_date = FV.check_date(claim_date)
-            if not validated_date.startswith("Data Entry Error"):
+
+            # Check if the input is empty or just spaces
+            if not claim_date or claim_date.isspace():
+                print()
+                print(
+                    f"{RED}Data Entry Error - Claim date cannot be empty. Please enter a valid date in the format YYYY-MM-DD.{RESET}")
+                continue
+            elif validated_date.startswith("Data Entry Error"):
+                print()
+                print(f"{RED}{validated_date}{RESET}")
+                continue
+            else:
                 # Check if the claim date is within the last 10 years
                 claim_date_age_limit = datetime.datetime.strptime(
                     claim_date, "%Y-%m-%d").date()
-            elif claim_date_age_limit >= current_date - datetime.timedelta(days=365 * 10):
-                print()
-                print(
-                    f"{RED}Data Entry Error - Claim date cannot be more than 10 years ago. Please try again.{RESET}")
+                ten_years_ago = current_date.replace(
+                    year=current_date.year - 10)
+                if not claim_date_age_limit >= ten_years_ago:
+                    print()
+                    print(
+                        f"{RED}Data Entry Error - Claim date cannot be more than 10 years old. Please try again.{RESET}")
+                    continue
                 break
-            else:
-                print()
-                print(f"{RED}{validated_date}{RESET}")
 
         while True:
             try:
                 print()
-                claim_amount = float(input("  Enter the claim amount: "))
-                if claim_amount > 0:
-                    break
+                # Remove leading and trailing spaces
+                claim_amount = input("  Enter the claim amount: ").strip()
                 print()
-                print(
-                    f"{RED}Data Entry Error - Claim amount must be greater than 0. Please try again.{RESET}")
+                if claim_amount == "":
+                    print()
+                    print(
+                        f"{RED}Data Entry Error - Claim amount cannot be empty. Please try again.{RESET}")
+                    continue
+                # Reassigning claim_amount with its float value
+                claim_amount = float(claim_amount)
+                if claim_amount <= 0:
+                    print()
+                    print(
+                        f"{RED}Data Entry Error - Claim amount cannot be 0. Please try again.{RESET}")
+                    continue
+                break
             except ValueError:
                 print()
                 print(
@@ -540,17 +561,16 @@ def get_claims():
     # Blinking message to simulate processing, followed by clearing the terminal to increase readability.
     receipt_blinker()
     clear_terminal()
-
     # Return the collected claims
     return claims
 
 
 def format_dollar_values(*args):
     """
-    Formats multiple values as dollar amounts.
+    Formats multiple values as dollar amounts (2 decimal places, $ in front).
 
     Args:
-    *args: Any number of values to be formatted.
+    *args: Any number of values can be formatted.
 
     Returns:
     A list of formatted values.
@@ -572,8 +592,7 @@ def repeat_program():
     while True:
         print()
         repeat = input(
-            f"{RED}Do you want to enter another customer? (Y/N): {RESET}"
-        ).upper()
+            f"{RED}  Do you want to enter another customer? (Y/N): {RESET}").upper()
         print()
         if repeat == "Y":
             clear_terminal()
@@ -581,9 +600,9 @@ def repeat_program():
         elif repeat == "N":
             clear_terminal()
             print()
-            print(f"{GREEN}Thank you for using One Stop Insurance Group!{RESET}")
+            print(
+                f"{GREEN}Thank you for using One Stop Insurance Group!{RESET}")
             exit()
         print()
-        print(
-            f"{RED}Data Entry Error - Invalid input. Please enter 'Y' or 'N'.{RESET}"
-        )
+        print(f"{RED}Invalid input. Please enter 'Y' or 'N'.{RESET}")
+        print()
